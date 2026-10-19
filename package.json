@@ -1,0 +1,20 @@
+{
+  "name": "theia-web-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter @theia/web dev",
+    "build": "pnpm --filter @theia/web build",
+    "start": "pnpm --filter @theia/web start",
+    "lint": "pnpm --filter @theia/web lint",
+    "test": "pnpm --filter @theia/web test"
+  },
+  "packageManager": "pnpm@12.14.0",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "unrs-resolver",
+      "@swc/core",
+      "sharp"
+    ]
+  }
+}
