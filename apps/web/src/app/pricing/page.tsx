@@ -1,5 +1,6 @@
 "use client";
 
+import { ResponsiveAuthLink } from "@/components/responsive-auth-link";
 import React, { useState } from "react";
 import Link from "next/link";
 import {
@@ -189,13 +190,13 @@ export default function PricingPage() {
             </div>
 
             <div>
-              <a
+              <ResponsiveAuthLink
                 href={`${dashboardUrl}/register?plan=free`}
                 className="w-full flex items-center justify-center gap-2 py-3.5 rounded-[13px] bg-[#1E2025] hover:bg-[#252830] text-[#F0F0F1] font-bold text-xs border border-white/[0.08] transition-all cursor-pointer"
               >
                 <span>ثبت‌نام رایگان</span>
                 <ArrowLeft className="w-4 h-4" />
-              </a>
+              </ResponsiveAuthLink>
             </div>
           </div>
 
@@ -254,13 +255,13 @@ export default function PricingPage() {
             </div>
 
             <div className="space-y-2">
-              <a
+              <ResponsiveAuthLink
                 href={`${dashboardUrl}/register?plan=pro&cycle=${billingCycle}`}
                 className="w-full flex items-center justify-center gap-2 py-3.5 rounded-[13px] bg-[#F0AE55] hover:bg-[#F3BE76] text-[#0D0E10] font-black text-xs transition-all shadow-[0_0_24px_rgba(240,174,85,0.35)] cursor-pointer"
               >
                 <span>شروع دوره آزمایشی رایگان</span>
                 <ArrowLeft className="w-4 h-4 stroke-[2.2]" />
-              </a>
+              </ResponsiveAuthLink>
               <p className="text-[10px] text-center text-[#707581]">
                 در دوره پیش‌نمایش، دسترسی حرفه‌ای به صورت رایگان برای کاربران
                 اولیه فعال است.
