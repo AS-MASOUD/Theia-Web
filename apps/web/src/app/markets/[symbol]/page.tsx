@@ -1,3 +1,4 @@
+import { ResponsiveAuthLink } from "@/components/responsive-auth-link";
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -206,13 +207,13 @@ export default async function MarketSymbolDetailPage({ params }: Props) {
             </p>
           </div>
 
-          <a
+          <ResponsiveAuthLink
             href={`${dashboardUrl}/register`}
             className="px-6 py-3 rounded-[13px] bg-[#F0AE55] hover:bg-[#F3BE76] text-[#0D0E10] text-xs font-bold transition-all shadow-[0_0_20px_rgba(240,174,85,0.25)] shrink-0 flex items-center gap-2"
           >
             <PlusCircle className="w-4 h-4 stroke-[2.2]" />
             <span>ثبت رایگان دارایی در سامانه</span>
-          </a>
+          </ResponsiveAuthLink>
         </div>
 
         {/* Return Button */}

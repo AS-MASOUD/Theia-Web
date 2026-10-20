@@ -1,5 +1,6 @@
 "use client";
 
+import { ResponsiveAuthLink } from "@/components/responsive-auth-link";
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
@@ -147,13 +148,13 @@ export default function PublicHomePage() {
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
-              <a
+              <ResponsiveAuthLink
                 href={`${dashboardUrl}/register`}
                 className="w-full sm:w-auto px-7 py-3.5 rounded-[14px] bg-gradient-to-r from-[#F0AE55] to-[#E29D44] hover:from-[#F3BE76] hover:to-[#F0AE55] text-[#0D0E10] text-sm font-black transition-all shadow-[0_0_24px_rgba(240,174,85,0.35)] hover:shadow-[0_0_32px_rgba(240,174,85,0.5)] flex items-center justify-center gap-2 active:scale-95"
               >
                 <span>شروع رایگان</span>
                 <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
-              </a>
+              </ResponsiveAuthLink>
 
               <Link
                 href="/features"
@@ -1063,20 +1064,20 @@ export default function PublicHomePage() {
           </p>
 
           <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">
-            <a
+            <ResponsiveAuthLink
               href={`${dashboardUrl}/register`}
               className="w-full sm:w-auto px-8 py-4 rounded-[14px] bg-[#F0AE55] hover:bg-[#F3BE76] text-[#0D0E10] text-sm font-black transition-all shadow-[0_0_24px_rgba(240,174,85,0.4)] hover:shadow-[0_0_36px_rgba(240,174,85,0.6)] flex items-center justify-center gap-2 cursor-pointer active:scale-95"
             >
               <span>شروع رایگان و بی‌درنگ</span>
               <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
-            </a>
+            </ResponsiveAuthLink>
 
-            <a
+            <ResponsiveAuthLink
               href={`${dashboardUrl}/login`}
               className="w-full sm:w-auto px-6 py-4 rounded-[14px] bg-[#141518] hover:bg-[#1B1D22] text-[#F0F0F1] text-sm font-bold border border-white/[0.08] transition-all cursor-pointer"
             >
               <span>قبلاً ثبت‌نام کرده‌اید؟ ورود به سامانه</span>
-            </a>
+            </ResponsiveAuthLink>
           </div>
         </div>
       </section>

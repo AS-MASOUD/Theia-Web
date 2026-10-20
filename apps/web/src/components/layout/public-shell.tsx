@@ -1,5 +1,6 @@
 "use client";
 
+import { ResponsiveAuthLink } from "@/components/responsive-auth-link";
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -83,7 +84,7 @@ export function PublicHeader() {
         {/* Right Actions: Direct to Dashboard Authority */}
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <a href={`${dashboardUrl}/login`} className="hidden sm:block">
+            <ResponsiveAuthLink href={`${dashboardUrl}/login`} className="hidden sm:block">
               <button
                 type="button"
                 className="px-3.5 py-2 rounded-[13px] text-xs font-medium text-[#A0A3AD] hover:text-[#F0F0F1] hover:bg-white/[0.05] transition-colors flex items-center gap-1.5 cursor-pointer"
@@ -91,8 +92,8 @@ export function PublicHeader() {
                 <LogIn className="w-3.5 h-3.5" />
                 <span>ورود به حساب</span>
               </button>
-            </a>
-            <a href={`${dashboardUrl}/register`}>
+            </ResponsiveAuthLink>
+            <ResponsiveAuthLink href={`${dashboardUrl}/register`}>
               <button
                 type="button"
                 className="px-4 py-2 rounded-[13px] bg-[#F0AE55] hover:bg-[#F3BE76] text-[#0D0E10] text-xs font-bold transition-all shadow-[0_0_16px_rgba(240,174,85,0.25)] hover:shadow-[0_0_22px_rgba(240,174,85,0.4)] flex items-center gap-1.5 cursor-pointer active:scale-95"
@@ -100,7 +101,7 @@ export function PublicHeader() {
                 <UserPlus className="w-3.5 h-3.5 stroke-[2.2]" />
                 <span>شروع رایگان</span>
               </button>
-            </a>
+            </ResponsiveAuthLink>
           </div>
 
           {/* Mobile Menu Trigger Button */}
@@ -149,22 +150,22 @@ export function PublicHeader() {
           </nav>
 
           <div className="pt-3 border-t border-white/[0.08] flex flex-col gap-2">
-            <a
+            <ResponsiveAuthLink
               href={`${dashboardUrl}/register`}
               onClick={() => setMobileMenuOpen(false)}
               className="w-full flex items-center justify-center gap-2 py-3 rounded-[13px] bg-[#F0AE55] text-[#0D0E10] font-bold text-sm shadow-[0_0_20px_rgba(240,174,85,0.3)]"
             >
               <UserPlus className="w-4 h-4" />
               <span>ایجاد حساب کاربری رایگان</span>
-            </a>
-            <a
+            </ResponsiveAuthLink>
+            <ResponsiveAuthLink
               href={`${dashboardUrl}/login`}
               onClick={() => setMobileMenuOpen(false)}
               className="w-full flex items-center justify-center gap-2 py-2.5 rounded-[13px] bg-[#1E2025] hover:bg-[#25272E] text-[#F0F0F1] font-medium text-sm border border-white/[0.06]"
             >
               <LogIn className="w-4 h-4" />
               <span>ورود به سامانه</span>
-            </a>
+            </ResponsiveAuthLink>
           </div>
         </div>
       )}
