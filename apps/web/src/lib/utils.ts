@@ -28,6 +28,44 @@ export function formatEnglishNumber(value: number | string | null | undefined): 
   return num.toLocaleString("en-US");
 }
 
+/**
+ * Formats a number with comma separators using English digits (e.g. 1,250,000).
+ * Handles numbers, strings, and null/undefined values safely.
+ */
+export function formatPriceNumber(
+  value: number | string | null | undefined,
+  decimals?: number
+): string {
+  if (value === null || value === undefined || value === "") return "0";
+  const normalized = typeof value === "string" ? normalizeDigitsToEnglish(value).replace(/,/g, "").trim() : value;
+  const num = typeof normalized === "string" ? parseFloat(normalized) : normalized;
+  if (isNaN(num)) return "0";
+  if (decimals !== undefined) {
+    return num.toLocaleString("en-US", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
+  }
+  return num.toLocaleString("en-US");
+}
+
+/**
+ * Formats a price with English digits and unit (e.g. "1,250,000 تومان" or "$68,450").
+ */
+export function formatPriceWithUnit(
+  price: number | string | null | undefined,
+  unit?: string | null
+): { formattedNumber: string; unitLabel: string } {
+  const isUsd = unit === "دلار" || unit === "USD" || unit === "$";
+  const num = typeof price === "string" ? parseFloat(normalizeDigitsToEnglish(price).replace(/,/g, "")) : Number(price || 0);
+  const decimals = isUsd ? (num > 0 && num < 10 ? 2 : 0) : 0;
+  const formatted = formatPriceNumber(num, decimals);
+  return {
+    formattedNumber: isUsd ? `$${formatted}` : formatted,
+    unitLabel: isUsd ? "USD" : (unit || "تومان"),
+  };
+}
+
 export function formatCurrency(
   amount: number | string | null | undefined,
   currency = "TOMAN",

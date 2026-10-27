@@ -230,7 +230,7 @@ export default function FeaturesPage() {
                             سپر نقدینگی امن
                           </span>
                           <p className="text-xl font-black text-[#F0F0F1]">
-                            ۳۰٪
+                            30%
                           </p>
                           <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
                             <div className="bg-[#88A9BC] h-full w-[30%]" />
@@ -241,7 +241,7 @@ export default function FeaturesPage() {
                             سرمایه‌گذاری و طلا
                           </span>
                           <p className="text-xl font-black text-[#F0AE55]">
-                            ۷۰٪
+                            70%
                           </p>
                           <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
                             <div className="bg-[#F0AE55] h-full w-[70%]" />
@@ -255,7 +255,7 @@ export default function FeaturesPage() {
                             مجموع ارزش پورتفولیو:
                           </span>
                           <span className="font-bold text-[#F0F0F1] font-mono">
-                            ۸۴۵,۰۰۰,۰۰۰ تومان
+                            845,000,000 تومان
                           </span>
                         </div>
                         <div className="flex justify-between text-xs">
@@ -263,7 +263,7 @@ export default function FeaturesPage() {
                             سود تحقق‌نیافته:
                           </span>
                           <span className="font-bold text-[#76A98C] font-mono">
-                            +۱۲۸,۴۰۰,۰۰۰ تومان (+۱۷.۸٪)
+                            +128,400,000 تومان (+17.8%)
                           </span>
                         </div>
                       </div>
@@ -286,13 +286,13 @@ export default function FeaturesPage() {
                           <span className="text-[#A0A3AD]">
                             تسهیلات خرید مسکن:
                           </span>
-                          <span className="font-bold text-[#F0F0F1]">
-                            ۳۸۵,۷۰۰,۰۰۰ ت
+                          <span className="font-bold text-[#F0F0F1] font-mono">
+                            385,700,000 ت
                           </span>
                         </div>
                         <div className="flex justify-between text-[11px] text-[#707581]">
-                          <span>قسط ماهانه: ۹,۴۵۰,۰۰۰ ت</span>
-                          <span className="text-[#76A98C]">۶۴٪ تسویه‌شده</span>
+                          <span>قسط ماهانه: <span className="font-mono">9,450,000</span> ت</span>
+                          <span className="text-[#76A98C] font-mono">64% تسویه‌شده</span>
                         </div>
                         <div className="w-full bg-white/5 h-2 rounded-full overflow-hidden">
                           <div className="bg-[#76A98C] h-full w-[64%]" />
@@ -325,7 +325,7 @@ export default function FeaturesPage() {
                             درآمد ناخالص ماهانه
                           </span>
                           <span className="font-bold text-[#76A98C] font-mono">
-                            +۴۸,۰۰۰,۰۰۰ تومان
+                            +48,000,000 تومان
                           </span>
                         </div>
                         <div className="flex justify-between text-xs">
@@ -333,7 +333,7 @@ export default function FeaturesPage() {
                             کل هزینه‌ها و اقساط
                           </span>
                           <span className="font-bold text-[#C77A82] font-mono">
-                            -۳۱,۲۰۰,۰۰۰ تومان
+                            -31,200,000 تومان
                           </span>
                         </div>
                         <div className="pt-2 border-t border-white/[0.05] flex justify-between text-xs font-bold">
@@ -341,14 +341,14 @@ export default function FeaturesPage() {
                             جریان نقدی آزاد (Free Cashflow)
                           </span>
                           <span className="text-[#F0AE55] font-mono">
-                            +۱۶,۸۰۰,۰۰۰ تومان
+                            +16,800,000 تومان
                           </span>
                         </div>
                       </div>
 
                       <div className="rounded-[14px] bg-[#18191E] p-3 text-center text-xs text-[#A0A3AD]">
                         نرخ پسانداز ماه جاری:{" "}
-                        <span className="text-[#76A98C] font-bold">۳۵٪</span>{" "}
+                        <span className="text-[#76A98C] font-bold font-mono">35%</span>{" "}
                         (عالی)
                       </div>
                     </div>
@@ -367,11 +367,11 @@ export default function FeaturesPage() {
 
                       <div className="h-32 flex items-end justify-between gap-2 px-2 pt-4">
                         {[
-                          { year: "امروز", h: "35%", val: "۱x" },
-                          { year: "۱ سال", h: "48%", val: "۱.۴x" },
-                          { year: "۲ سال", h: "62%", val: "۱.۹x" },
-                          { year: "۳ سال", h: "78%", val: "۲.۶x" },
-                          { year: "۵ سال", h: "95%", val: "۴.۱x" },
+                          { year: "امروز", h: "35%", val: "1x" },
+                          { year: "۱ سال", h: "48%", val: "1.4x" },
+                          { year: "۲ سال", h: "62%", val: "1.9x" },
+                          { year: "۳ سال", h: "78%", val: "2.6x" },
+                          { year: "۵ سال", h: "95%", val: "4.1x" },
                         ].map((b, i) => (
                           <div
                             key={i}

@@ -17,6 +17,7 @@ import {
   getRelatedInsights,
   getAllInsights,
 } from "@/data/insights-data";
+import { ArticleComments } from "@/components/insights/article-comments";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -161,6 +162,9 @@ export default async function InsightArticlePage({ params }: Props) {
             </Link>
           </div>
         </div>
+
+        {/* User Comments Section */}
+        <ArticleComments articleSlug={article.slug} />
 
         {/* Related Articles Section */}
         {related.length > 0 && (

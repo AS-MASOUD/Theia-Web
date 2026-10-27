@@ -161,7 +161,7 @@ export default function PricingPage() {
 
               {/* Price */}
               <div className="flex items-baseline gap-2 pt-2">
-                <span className="text-4xl font-black text-[#F0F0F1]">۰</span>
+                <span className="text-4xl font-black text-[#F0F0F1] font-mono">0</span>
                 <span className="text-xs text-[#A0A3AD]">
                   تومان / برای همیشه
                 </span>
@@ -224,7 +224,7 @@ export default function PricingPage() {
               {/* Price */}
               <div className="flex items-baseline gap-2 pt-2">
                 <span className="text-4xl font-black text-[#F0AE55] font-mono">
-                  {billingCycle === "annually" ? "۱,۸۰۰,۰۰۰" : "۱۸۰,۰۰۰"}
+                  {billingCycle === "annually" ? "1,800,000" : "180,000"}
                 </span>
                 <span className="text-xs text-[#A0A3AD]">
                   تومان / {billingCycle === "annually" ? "سالانه" : "ماهانه"}

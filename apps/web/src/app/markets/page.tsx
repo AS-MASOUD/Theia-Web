@@ -23,6 +23,7 @@ import { webApi } from "@/lib/api";
 import { getInitialMarketCatalog } from "@/data/market-instruments";
 import { MarketQuote, MarketRatesResponse } from "@/types/market";
 import { cn } from "@/lib/utils";
+import { ChartSignalsSection } from "@/components/market/chart-signals-section";
 
 const CATEGORIES = [
   { id: "all", label: "همه ابزارها" },
@@ -174,8 +175,8 @@ export default function MarketsHubPage() {
           <div className="rounded-[16px] bg-[#141518] border border-white/[0.07] p-4 flex flex-col justify-between">
             <span className="text-[11px] text-[#A0A3AD]">طلای ۱۸ عیار (هر گرم)</span>
             <div className="flex items-baseline justify-between mt-2">
-              <span className="text-base font-extrabold text-[#F0F0F1]">
-                {Number(gold18k).toLocaleString("fa-IR")}
+              <span className="text-base font-extrabold text-[#F0F0F1] font-mono">
+                {Number(gold18k).toLocaleString("en-US")}
               </span>
               <span className="text-[11px] text-[#F0AE55]">تومان</span>
             </div>
@@ -183,8 +184,8 @@ export default function MarketsHubPage() {
           <div className="rounded-[16px] bg-[#141518] border border-white/[0.07] p-4 flex flex-col justify-between">
             <span className="text-[11px] text-[#A0A3AD]">سکه تمام امامی</span>
             <div className="flex items-baseline justify-between mt-2">
-              <span className="text-base font-extrabold text-[#F0F0F1]">
-                {Number(emamiCoin).toLocaleString("fa-IR")}
+              <span className="text-base font-extrabold text-[#F0F0F1] font-mono">
+                {Number(emamiCoin).toLocaleString("en-US")}
               </span>
               <span className="text-[11px] text-[#F0AE55]">تومان</span>
             </div>
@@ -192,8 +193,8 @@ export default function MarketsHubPage() {
           <div className="rounded-[16px] bg-[#141518] border border-white/[0.07] p-4 flex flex-col justify-between">
             <span className="text-[11px] text-[#A0A3AD]">دلار آمریکا (آزاد)</span>
             <div className="flex items-baseline justify-between mt-2">
-              <span className="text-base font-extrabold text-[#F0F0F1]">
-                {Number(usdRate).toLocaleString("fa-IR")}
+              <span className="text-base font-extrabold text-[#F0F0F1] font-mono">
+                {Number(usdRate).toLocaleString("en-US")}
               </span>
               <span className="text-[11px] text-[#F0AE55]">تومان</span>
             </div>
@@ -201,8 +202,8 @@ export default function MarketsHubPage() {
           <div className="rounded-[16px] bg-[#141518] border border-white/[0.07] p-4 flex flex-col justify-between">
             <span className="text-[11px] text-[#A0A3AD]">بیت‌کوین (BTC)</span>
             <div className="flex items-baseline justify-between mt-2">
-              <span className="text-base font-extrabold text-[#F0F0F1]">
-                ${Number(btcPriceUsd).toLocaleString()}
+              <span className="text-base font-extrabold text-[#F0F0F1] font-mono">
+                ${Number(btcPriceUsd).toLocaleString("en-US")}
               </span>
               <span className="text-[11px] text-[#76A98C] font-semibold">USD</span>
             </div>
@@ -300,8 +301,8 @@ export default function MarketsHubPage() {
                     <div className="flex items-baseline gap-1.5">
                       <span className="text-xl font-black text-[#F0F0F1] font-mono">
                         {item.unit === "دلار"
-                          ? `$${priceNum.toLocaleString()}`
-                          : priceNum.toLocaleString("fa-IR")}
+                          ? `$${priceNum.toLocaleString("en-US")}`
+                          : priceNum.toLocaleString("en-US")}
                       </span>
                       <span className="text-[11px] text-[#A0A3AD]">
                         {item.unit}
@@ -310,7 +311,10 @@ export default function MarketsHubPage() {
 
                     {item.price_toman && item.unit === "دلار" && (
                       <p className="text-[10px] text-[#707581]">
-                        معادل تقریبی: {Number(item.price_toman).toLocaleString("fa-IR")}{" "}
+                        معادل تقریبی:{" "}
+                        <span className="font-mono">
+                          {Number(item.price_toman).toLocaleString("en-US")}
+                        </span>{" "}
                         تومان
                       </p>
                     )}
@@ -322,6 +326,9 @@ export default function MarketsHubPage() {
             );
           })}
         </div>
+
+        {/* Daily Signals & Chart Analysis Section from Traders */}
+        <ChartSignalsSection />
 
         {/* Live Interactive Currency & Gold Calculator */}
         <div className="rounded-[24px] bg-[#141519] border border-white/[0.08] p-6 sm:p-8 space-y-6">
@@ -402,21 +409,21 @@ export default function MarketsHubPage() {
               <div className="rounded-[16px] bg-[#18191E] border border-white/[0.06] p-4">
                 <span className="text-[11px] text-[#A0A3AD]">معادل ریالی (تومان)</span>
                 <p className="text-base font-extrabold text-[#F0F0F1] mt-1 font-mono">
-                  {converterOutputs.toman.toLocaleString("fa-IR")}
+                  {converterOutputs.toman.toLocaleString("en-US")}
                 </p>
               </div>
 
               <div className="rounded-[16px] bg-[#18191E] border border-white/[0.06] p-4">
                 <span className="text-[11px] text-[#A0A3AD]">معادل دلار آمریکا (USD)</span>
                 <p className="text-base font-extrabold text-[#76A98C] mt-1 font-mono">
-                  ${Number(converterOutputs.usd).toLocaleString()}
+                  ${Number(converterOutputs.usd).toLocaleString("en-US")}
                 </p>
               </div>
 
               <div className="rounded-[16px] bg-[#18191E] border border-white/[0.06] p-4">
                 <span className="text-[11px] text-[#A0A3AD]">معادل گرم طلای ۱۸</span>
                 <p className="text-base font-extrabold text-[#F0AE55] mt-1 font-mono">
-                  {Number(converterOutputs.goldGrams).toLocaleString("fa-IR")}{" "}
+                  {Number(converterOutputs.goldGrams).toLocaleString("en-US")}{" "}
                   <span className="text-xs font-normal">گرم</span>
                 </p>
               </div>
@@ -424,7 +431,7 @@ export default function MarketsHubPage() {
               <div className="rounded-[16px] bg-[#18191E] border border-white/[0.06] p-4">
                 <span className="text-[11px] text-[#A0A3AD]">معادل سکه تمام امامی</span>
                 <p className="text-base font-extrabold text-[#F0F0F1] mt-1 font-mono">
-                  {Number(converterOutputs.emamiCoins).toLocaleString("fa-IR")}{" "}
+                  {Number(converterOutputs.emamiCoins).toLocaleString("en-US")}{" "}
                   <span className="text-xs font-normal">عدد</span>
                 </p>
               </div>

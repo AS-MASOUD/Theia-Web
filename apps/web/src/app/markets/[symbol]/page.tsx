@@ -111,8 +111,8 @@ export default async function MarketSymbolDetailPage({ params }: Props) {
                   <>
                     <span className="text-3xl sm:text-4xl font-black text-[#F0F0F1] font-mono">
                       {instrument.unit === "دلار"
-                        ? `$${priceNum.toLocaleString()}`
-                        : priceNum.toLocaleString("fa-IR")}
+                        ? `$${priceNum.toLocaleString("en-US")}`
+                        : priceNum.toLocaleString("en-US")}
                     </span>
                     <span className="text-xs text-[#F0AE55] font-semibold">
                       {instrument.unit}
@@ -180,9 +180,9 @@ export default async function MarketSymbolDetailPage({ params }: Props) {
               <span className="text-[11px] text-[#707581]">معادل تومانی تقریبی</span>
               <p className="text-sm font-semibold text-[#F0AE55] font-mono">
                 {quote?.price_toman
-                  ? `${Number(quote.price_toman).toLocaleString("fa-IR")} ت`
+                  ? `${Number(quote.price_toman).toLocaleString("en-US")} ت`
                   : hasPrice && priceNum !== null
-                    ? `${priceNum.toLocaleString("fa-IR")} ت`
+                    ? `${priceNum.toLocaleString("en-US")} ت`
                     : "—"}
               </p>
             </div>

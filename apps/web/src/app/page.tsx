@@ -236,7 +236,7 @@ export default function PublicHomePage() {
                   </div>
 
                   <span className="px-2 py-0.5 rounded-[8px] bg-[#76A98C]/15 text-[#76A98C] text-[10px] font-bold border border-[#76A98C]/25">
-                    +۱۲.۴٪ رشد ماهانه
+                    +12.4% رشد ماهانه
                   </span>
                 </div>
 
@@ -259,7 +259,7 @@ export default function PublicHomePage() {
                   <div className="col-span-4 rounded-[16px] bg-[#121316] border border-white/[0.06] p-3 flex flex-col justify-between relative overflow-hidden">
                     <div className="relative z-10">
                       <span className="text-lg font-black text-[#F0F0F1]">
-                        ۳۰٪
+                        30%
                       </span>
                       <p className="text-[10px] text-[#88A9BC] font-semibold mt-0.5">
                         ذخیره امن
@@ -277,7 +277,7 @@ export default function PublicHomePage() {
                   <div className="col-span-5 rounded-[16px] bg-gradient-to-b from-[#1F1E1B] to-[#161513] border border-[#F0AE55]/30 p-3 flex flex-col justify-between relative overflow-hidden shadow-[0_0_20px_rgba(240,174,85,0.12)]">
                     <div className="relative z-10">
                       <span className="text-lg font-black text-[#F0AE55]">
-                        ۷۰٪
+                        70%
                       </span>
                       <p className="text-[10px] text-[#F0AE55] font-semibold mt-0.5">
                         سرمایه‌گذاری
@@ -328,7 +328,7 @@ export default function PublicHomePage() {
                   <span className="text-[#F0AE55] font-semibold">
                     تحلیل دستیار هوشمند:{" "}
                   </span>
-                  با توجه به تورم دوره‌ای، بازتوزیع ۲۰ میلیون تومان نقدینگی
+                  با توجه به تورم دوره‌ای، بازتوزیع 20 میلیون تومان نقدینگی
                   مازاد به صندوق طلا، قدرت خرید شما را تثبیت می‌کند.
                 </p>
               </div>
@@ -409,8 +409,8 @@ export default function PublicHomePage() {
                   <div>
                     <span className="text-base font-black text-[#F0F0F1] font-mono">
                       {q.unit === "دلار"
-                        ? `$${priceNum.toLocaleString()}`
-                        : priceNum.toLocaleString("fa-IR")}
+                        ? `$${priceNum.toLocaleString("en-US")}`
+                        : priceNum.toLocaleString("en-US")}
                     </span>{" "}
                     <span className="text-[10px] text-[#A0A3AD]">{q.unit}</span>
                   </div>
@@ -499,10 +499,10 @@ export default function PublicHomePage() {
                     طلای ۱۸ عیار و سکه
                   </span>
                   <p className="text-xl font-black text-[#F0AE55] mt-1 font-mono">
-                    ۴۳۵,۰۰۰,۰۰۰ تومان
+                    435,000,000 تومان
                   </p>
                   <span className="text-[10px] text-[#76A98C]">
-                    ۵۱.۴٪ کل پورتفولیو
+                    51.4% کل پورتفولیو
                   </span>
                 </div>
                 <div className="rounded-[18px] bg-[#18191E] p-4 border border-white/[0.06]">
@@ -510,10 +510,10 @@ export default function PublicHomePage() {
                     سپرده‌های بانکی و نقدینگی
                   </span>
                   <p className="text-xl font-black text-[#F0F0F1] mt-1 font-mono">
-                    ۲۵۰,۰۰۰,۰۰۰ تومان
+                    250,000,000 تومان
                   </p>
                   <span className="text-[10px] text-[#88A9BC]">
-                    ۲۹.۵٪ کل پورتفولیو
+                    29.5% کل پورتفولیو
                   </span>
                 </div>
                 <div className="rounded-[18px] bg-[#18191E] p-4 border border-white/[0.06]">
@@ -521,10 +521,10 @@ export default function PublicHomePage() {
                     ارز و دارایی‌های بین‌المللی
                   </span>
                   <p className="text-xl font-black text-[#76A98C] mt-1 font-mono">
-                    ۱۶۰,۰۰۰,۰۰۰ تومان
+                    160,000,000 تومان
                   </p>
                   <span className="text-[10px] text-[#76A98C]">
-                    ۱۹.۱٪ کل پورتفولیو
+                    19.1% کل پورتفولیو
                   </span>
                 </div>
               </div>
@@ -566,7 +566,7 @@ export default function PublicHomePage() {
                     ورودی جریان نقدی (درآمد)
                   </span>
                   <p className="text-xl font-black text-[#76A98C] mt-1 font-mono">
-                    +۵۵,۰۰۰,۰۰۰ تومان
+                    +55,000,000 تومان
                   </p>
                   <span className="text-[10px] text-[#707581]">
                     حقوق ثابت و سود سرمایه‌گذاری
@@ -577,7 +577,7 @@ export default function PublicHomePage() {
                     کل هزینه‌ها و اقساط وام
                   </span>
                   <p className="text-xl font-black text-[#C77A82] mt-1 font-mono">
-                    -۳۴,۸۰۰,۰۰۰ تومان
+                    -34,800,000 تومان
                   </p>
                   <span className="text-[10px] text-[#707581]">
                     هزینه معیشت و خدمت بدهی
@@ -588,7 +588,7 @@ export default function PublicHomePage() {
                     جریان نقدی آزاد مازاد
                   </span>
                   <p className="text-xl font-black text-[#F0AE55] mt-1 font-mono">
-                    +۲۰,۲۰۰,۰۰۰ تومان
+                    +20,200,000 تومان
                   </p>
                   <span className="text-[10px] text-[#F0AE55]">
                     آماده جهت سرمایه‌گذاری دوره‌ای
@@ -604,7 +604,7 @@ export default function PublicHomePage() {
                 <span className="text-xs text-[#A0A3AD]">
                   نسبت سلامت نقدینگی (Runway)
                 </span>
-                <p className="text-3xl font-black text-[#76A98C]">۷.۲ ماه</p>
+                <p className="text-3xl font-black text-[#76A98C] font-mono">7.2 ماه</p>
                 <p className="text-[11px] text-[#707581]">
                   پوشش کامل هزینه‌های ضروری در حالت اضطرار
                 </p>
@@ -613,7 +613,7 @@ export default function PublicHomePage() {
                 <span className="text-xs text-[#A0A3AD]">
                   نسبت بدهی به درآمد (DTI)
                 </span>
-                <p className="text-3xl font-black text-[#F0AE55]">۲۴.۵٪</p>
+                <p className="text-3xl font-black text-[#F0AE55] font-mono">24.5%</p>
                 <p className="text-[11px] text-[#707581]">
                   در محدوده ایمن و استاندارد بانکی
                 </p>
@@ -622,7 +622,7 @@ export default function PublicHomePage() {
                 <span className="text-xs text-[#A0A3AD]">
                   نرخ تبدیل به دارایی سرمایه‌ای
                 </span>
-                <p className="text-3xl font-black text-[#88A9BC]">۳۶.۷٪</p>
+                <p className="text-3xl font-black text-[#88A9BC] font-mono">36.7%</p>
                 <p className="text-[11px] text-[#707581]">
                   پس‌انداز مؤثر هدایت شده به رشد ثروت
                 </p>
@@ -892,7 +892,7 @@ export default function PublicHomePage() {
               <p>
                 بر مبنای متوسط درآمد خالص ماهانه فعلی شما، افزایش ۱۵ درصدی
                 پس‌انداز معادل{" "}
-                <strong className="text-[#F0AE55]">۷,۲۰۰,۰۰۰ تومان</strong> در
+                <strong className="text-[#F0AE55] font-mono">7,200,000 تومان</strong> در
                 ماه خواهد بود.
               </p>
 
@@ -900,20 +900,20 @@ export default function PublicHomePage() {
                 <div className="flex justify-between">
                   <span>ارزش انباشته پس‌انداز خام (۵ ساله):</span>
                   <span className="font-bold text-[#F0F0F1]">
-                    ۴۳۲,۰۰۰,۰۰۰ تومان
+                    432,000,000 تومان
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span>
-                    ارزش بازتوزیع شده در سبد متعادل (با فرض بازده ۲۲٪):
+                    ارزش بازتوزیع شده در سبد متعادل (با فرض بازده 22%):
                   </span>
                   <span className="font-bold text-[#76A98C]">
-                    ۷۱۵,۴۰۰,۰۰۰ تومان
+                    715,400,000 تومان
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span>تسریع تاریخ آزادی کامل از وام‌ها:</span>
-                  <span className="font-bold text-[#F0AE55]">۱۴ ماه زودتر</span>
+                  <span className="font-bold text-[#F0AE55] font-mono">14 ماه زودتر</span>
                 </div>
               </div>
 
