@@ -40,6 +40,7 @@ import { getAllInsights } from "@/data/insights-data";
 import { MarketQuote, MarketRatesResponse } from "@/types/market";
 import { cn } from "@/lib/utils";
 import { IphoneMobilePreview } from "@/components/home/iphone-mobile-preview";
+import { HighlightTickerStrip } from "@/components/market/highlight-ticker-strip";
 
 // Mini Sparkline component
 function Sparkline({ isPositive }: { isPositive: boolean }) {
@@ -86,28 +87,18 @@ export default function PublicHomePage() {
     refetchInterval: 60000,
   });
 
-  // Top spotlight market quotes
-  const spotlightQuotes = useMemo(() => {
+  const allQuotes: MarketQuote[] = useMemo(() => {
     if (!marketData) return [];
-    const all = [
+    return [
       ...(marketData.gold_and_coins || []),
       ...(marketData.currencies || []),
       ...(marketData.cryptocurrency || []),
       ...(marketData.commodities || []),
+      ...(marketData.stocks || []),
     ];
-
-    const targetSymbols = [
-      "IR_GOLD_18K",
-      "EMAMI_COIN",
-      "USD",
-      "BTC",
-      "EUR",
-      "XAUUSD",
-    ];
-    return targetSymbols
-      .map((sym) => all.find((q) => q.symbol === sym))
-      .filter((q): q is MarketQuote => !!q);
   }, [marketData]);
+
+  const usdRate = Number(marketData?.usd_toman_rate || 94850);
 
   // Featured insights
   const insights = useMemo(() => getAllInsights().slice(0, 3), []);
@@ -223,60 +214,8 @@ export default function PublicHomePage() {
           </div>
         </div>
 
-        {/* Live quote cards grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {spotlightQuotes.map((q) => {
-            const isPos = (q.change_percent || 0) >= 0;
-            const priceNum = Number(q.price);
-
-            return (
-              <Link
-                key={q.symbol}
-                href={`/markets/${q.symbol}`}
-                className="group rounded-[18px] bg-[#141519] border border-white/[0.07] hover:border-[#F0AE55]/30 hover:bg-[#181A20] p-4.5 flex flex-col justify-between space-y-3 transition-all duration-200"
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <span className="text-[10px] font-mono uppercase text-[#707581]">
-                      {q.symbol}
-                    </span>
-                    <h3 className="text-xs font-bold text-[#F0F0F1] group-hover:text-[#F0AE55] transition-colors">
-                      {q.name}
-                    </h3>
-                  </div>
-
-                  <div
-                    className={cn(
-                      "px-2 py-0.5 rounded-[6px] text-[10px] font-bold flex items-center gap-1",
-                      isPos
-                        ? "bg-[#76A98C]/15 text-[#76A98C]"
-                        : "bg-[#C77A82]/15 text-[#C77A82]",
-                    )}
-                  >
-                    {isPos ? "+" : ""}
-                    {q.change_percent !== null && q.change_percent !== undefined
-                      ? q.change_percent.toFixed(2)
-                      : "0.00"}
-                    %
-                  </div>
-                </div>
-
-                <div className="flex items-end justify-between pt-2 border-t border-white/[0.04]">
-                  <div>
-                    <span className="text-base font-black text-[#F0F0F1] font-mono">
-                      {q.unit === "دلار"
-                        ? `$${priceNum.toLocaleString("en-US")}`
-                        : priceNum.toLocaleString("en-US")}
-                    </span>{" "}
-                    <span className="text-[10px] text-[#A0A3AD]">{q.unit}</span>
-                  </div>
-
-                  <Sparkline isPositive={isPos} />
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+        {/* Highlight Ticker Strip */}
+        <HighlightTickerStrip quotes={allQuotes} usdRate={usdRate} />
       </section>
 
       {/* ======================================================== */}
@@ -293,7 +232,7 @@ export default function PublicHomePage() {
           </h2>
           <p className="text-xs sm:text-sm text-[#A0A3AD]">
             بر روی هر یک از بخش‌های زیر کلیک کنید تا نحوه تعامل و نمایش داده‌ها
-            را در سامانه Theia مشاهده نمایید.
+            را در سامانه تئا مشاهده نمایید.
           </p>
         </div>
 
@@ -859,7 +798,7 @@ export default function PublicHomePage() {
               <span>تعهد اخلاقی و مهندسی داده</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-[#F0F0F1]">
-              چرا می‌توانید به پلتفرم Theia اطمینان کنید؟
+              چرا می‌توانید به پلتفرم تئا اطمینان کنید؟
             </h2>
           </div>
 

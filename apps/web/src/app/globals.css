@@ -170,7 +170,9 @@ body {
   overscroll-behavior-y: auto;
   -webkit-font-smoothing: antialiased;
 }
-
+section{
+  margin-bottom: 5rem;
+}
 /* Enforce English font & tabular digits for numbers, prices, and metrics */
 .font-mono {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
