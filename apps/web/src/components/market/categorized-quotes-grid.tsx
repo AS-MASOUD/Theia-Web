@@ -22,7 +22,10 @@ import {
   Gem,
 } from "lucide-react";
 import { MarketQuote } from "@/types/market";
-import { INSTRUMENT_FALLBACKS, InstrumentMetadata } from "@/data/market-instruments";
+import {
+  INSTRUMENT_FALLBACKS,
+  InstrumentMetadata,
+} from "@/data/market-instruments";
 import { cn, formatPriceNumber } from "@/lib/utils";
 
 export interface CategorizedQuotesGridProps {
@@ -59,7 +62,10 @@ function MiniSparkline({ isPositive }: { isPositive: boolean }) {
     : "0,3 12,5 24,10 36,8 48,15 60,12 72,16 84,14 96,19";
 
   return (
-    <svg className="w-14 h-4 overflow-visible shrink-0 opacity-80" viewBox="0 0 96 20">
+    <svg
+      className="w-14 h-4 overflow-visible shrink-0 opacity-80"
+      viewBox="0 0 96 20"
+    >
       <polyline
         fill="none"
         stroke={isPositive ? "#76A98C" : "#C77A82"}
@@ -81,11 +87,13 @@ export function CategorizedQuotesGrid({
   usdRate = 94850,
 }: CategorizedQuotesGridProps) {
   const [viewMode, setViewMode] = useState<"cards" | "accordion">("cards");
-  const [openAccordions, setOpenAccordions] = useState<Record<string, boolean>>({
-    group_1: true,
-    group_2: true,
-    group_3: true,
-  });
+  const [openAccordions, setOpenAccordions] = useState<Record<string, boolean>>(
+    {
+      group_1: true,
+      group_2: true,
+      group_3: true,
+    },
+  );
 
   const toggleAccordion = (id: string) => {
     setOpenAccordions((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -94,9 +102,15 @@ export function CategorizedQuotesGrid({
   // Helper to resolve effective quote with reliable fallback numbers
   const resolveQuote = (symbol: string): MarketQuote => {
     const live = quotes.find((q) => q.symbol === symbol);
-    const fallback: InstrumentMetadata | undefined = INSTRUMENT_FALLBACKS[symbol];
+    const fallback: InstrumentMetadata | undefined =
+      INSTRUMENT_FALLBACKS[symbol];
 
-    if (live && live.price !== null && live.price !== undefined && live.price !== "") {
+    if (
+      live &&
+      live.price !== null &&
+      live.price !== undefined &&
+      live.price !== ""
+    ) {
       return {
         ...live,
         change_value: live.change_value ?? fallback?.defaultChangeVal ?? null,
@@ -370,7 +384,9 @@ export function CategorizedQuotesGrid({
         0,
       );
       const avgChange =
-        filtered.length > 0 ? Number((totalPct / filtered.length).toFixed(2)) : 0;
+        filtered.length > 0
+          ? Number((totalPct / filtered.length).toFixed(2))
+          : 0;
 
       return {
         id: grp.id,
@@ -385,46 +401,58 @@ export function CategorizedQuotesGrid({
   }, [selectedCategory, quotes, searchQuery]);
 
   // Color theme mapper
-  const getThemeStyles = (color: "amber" | "emerald" | "indigo" | "rose" | "cyan") => {
+  const getThemeStyles = (
+    color: "amber" | "emerald" | "indigo" | "rose" | "cyan",
+  ) => {
     switch (color) {
       case "amber":
         return {
-          iconBg: "bg-[rgba(240,174,85,0.12)] border-[#F0AE55]/30 text-[#F0AE55]",
+          iconBg:
+            "bg-[rgba(240,174,85,0.12)] border-[#F0AE55]/30 text-[#F0AE55]",
           borderGlow: "group-hover:border-[#F0AE55]/40",
-          radialGlow: "bg-[radial-gradient(circle_at_top_right,rgba(240,174,85,0.08)_0%,transparent_60%)]",
+          radialGlow:
+            "bg-[radial-gradient(circle_at_top_right,rgba(240,174,85,0.08)_0%,transparent_60%)]",
           accentText: "text-[#F0AE55]",
           pillBg: "bg-[#F0AE55]/10 text-[#F0AE55] border-[#F0AE55]/20",
         };
       case "emerald":
         return {
-          iconBg: "bg-[rgba(118,169,140,0.14)] border-[#76A98C]/35 text-[#76A98C]",
+          iconBg:
+            "bg-[rgba(118,169,140,0.14)] border-[#76A98C]/35 text-[#76A98C]",
           borderGlow: "group-hover:border-[#76A98C]/40",
-          radialGlow: "bg-[radial-gradient(circle_at_top_right,rgba(118,169,140,0.08)_0%,transparent_60%)]",
+          radialGlow:
+            "bg-[radial-gradient(circle_at_top_right,rgba(118,169,140,0.08)_0%,transparent_60%)]",
           accentText: "text-[#76A98C]",
           pillBg: "bg-[#76A98C]/10 text-[#76A98C] border-[#76A98C]/20",
         };
       case "rose":
         return {
-          iconBg: "bg-[rgba(199,122,130,0.14)] border-[#C77A82]/35 text-[#C77A82]",
+          iconBg:
+            "bg-[rgba(199,122,130,0.14)] border-[#C77A82]/35 text-[#C77A82]",
           borderGlow: "group-hover:border-[#C77A82]/40",
-          radialGlow: "bg-[radial-gradient(circle_at_top_right,rgba(199,122,130,0.08)_0%,transparent_60%)]",
+          radialGlow:
+            "bg-[radial-gradient(circle_at_top_right,rgba(199,122,130,0.08)_0%,transparent_60%)]",
           accentText: "text-[#C77A82]",
           pillBg: "bg-[#C77A82]/10 text-[#C77A82] border-[#C77A82]/20",
         };
       case "cyan":
         return {
-          iconBg: "bg-[rgba(56,189,248,0.12)] border-[#38BDF8]/30 text-[#38BDF8]",
+          iconBg:
+            "bg-[rgba(56,189,248,0.12)] border-[#38BDF8]/30 text-[#38BDF8]",
           borderGlow: "group-hover:border-[#38BDF8]/40",
-          radialGlow: "bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.08)_0%,transparent_60%)]",
+          radialGlow:
+            "bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.08)_0%,transparent_60%)]",
           accentText: "text-[#38BDF8]",
           pillBg: "bg-[#38BDF8]/10 text-[#38BDF8] border-[#38BDF8]/20",
         };
       case "indigo":
       default:
         return {
-          iconBg: "bg-[rgba(129,140,248,0.12)] border-[#818CF8]/30 text-[#818CF8]",
+          iconBg:
+            "bg-[rgba(129,140,248,0.12)] border-[#818CF8]/30 text-[#818CF8]",
           borderGlow: "group-hover:border-[#818CF8]/40",
-          radialGlow: "bg-[radial-gradient(circle_at_top_right,rgba(129,140,248,0.08)_0%,transparent_60%)]",
+          radialGlow:
+            "bg-[radial-gradient(circle_at_top_right,rgba(129,140,248,0.08)_0%,transparent_60%)]",
           accentText: "text-[#818CF8]",
           pillBg: "bg-[#818CF8]/10 text-[#818CF8] border-[#818CF8]/20",
         };
@@ -514,7 +542,7 @@ export function CategorizedQuotesGrid({
               <div
                 key={group.id}
                 className={cn(
-                  "rounded-[24px] bg-[#141519]/95 border border-white/[0.08] transition-all duration-300 shadow-xl flex flex-col h-[560px] relative overflow-hidden group",
+                  "rounded-[24px] bg-[#141519]/95 border border-white/[0.08] transition-all duration-300 shadow-xl flex flex-col h-[425px] relative overflow-hidden group",
                   styles.borderGlow,
                 )}
               >
@@ -755,11 +783,21 @@ export function CategorizedQuotesGrid({
                       <table className="w-full text-right text-xs">
                         <thead>
                           <tr className="bg-white/[0.02] border-b border-white/[0.06] text-[#707581] text-[10px]">
-                            <th className="py-2.5 px-6 font-semibold">دارایی / نماد</th>
-                            <th className="py-2.5 px-4 font-semibold text-left">آخرین قیمت</th>
-                            <th className="py-2.5 px-4 font-semibold text-left">تغییر ۲۴ ساعته</th>
-                            <th className="py-2.5 px-4 font-semibold text-center hidden md:table-cell">نمودار روند</th>
-                            <th className="py-2.5 px-6 font-semibold text-left">اقدام</th>
+                            <th className="py-2.5 px-6 font-semibold">
+                              دارایی / نماد
+                            </th>
+                            <th className="py-2.5 px-4 font-semibold text-left">
+                              آخرین قیمت
+                            </th>
+                            <th className="py-2.5 px-4 font-semibold text-left">
+                              تغییر ۲۴ ساعته
+                            </th>
+                            <th className="py-2.5 px-4 font-semibold text-center hidden md:table-cell">
+                              نمودار روند
+                            </th>
+                            <th className="py-2.5 px-6 font-semibold text-left">
+                              اقدام
+                            </th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-white/[0.04]">
