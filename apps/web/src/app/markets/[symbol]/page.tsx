@@ -13,31 +13,74 @@ import {
 import { SUPPORTED_INSTRUMENTS } from "@/data/market-instruments";
 import { webApi } from "@/lib/api";
 import { MarketQuote } from "@/types/market";
-import { cn } from "@/lib/utils";
+import { cn, formatPriceNumber } from "@/lib/utils";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 interface Props {
   params: Promise<{ symbol: string }>;
 }
 
-export async function generateStaticParams() {
-  return SUPPORTED_INSTRUMENTS.map((inst) => ({
-    symbol: inst.symbol,
-  }));
-}
+const SYMBOL_ALIASES: Record<string, string[]> = {
+  USD: ["USD", "USD_IRR", "DOLLAR"],
+  EUR: ["EUR", "EUR_IRR"],
+  AED: ["AED", "AED_IRR", "DIRHAM"],
+  GBP: ["GBP", "GBP_IRR"],
+  TRY: ["TRY", "TRY_IRR"],
+  CNY: ["CNY", "CNY_IRR"],
+  CAD: ["CAD", "CAD_IRR"],
+  CHF: ["CHF", "CHF_IRR"],
+  IQD: ["IQD", "IQD_IRR"],
+  SAR: ["SAR", "SAR_IRR"],
+  AUD: ["AUD", "AUD_IRR"],
+  BTC: ["BTC", "BTC_USD", "BITCOIN", "BTCUSDT"],
+  ETH: ["ETH", "ETH_USD", "ETHEREUM", "ETHUSDT"],
+  USDT: ["USDT", "USDT_IRT", "USDT_USD", "TETHER", "USDTUSD"],
+  SOL: ["SOL", "SOL_USD", "SOLANA", "SOLUSDT"],
+  BNB: ["BNB", "BNB_USD", "BINANCE_COIN", "BNBUSDT"],
+  TON: ["TON", "TON_USD", "TONCOIN", "TONUSDT"],
+  XRP: ["XRP", "XRP_USD", "RIPPLE", "XRPUSDT"],
+  USDC: ["USDC", "USDC_USD", "USDCUSDT"],
+  IR_GOLD_18K: ["IR_GOLD_18K", "GOLD_18K", "GOLD18K"],
+  IR_MITHQAL: ["IR_MITHQAL", "MITHQAL", "MITHQAL_GOLD"],
+  GOLD_24K: ["GOLD_24K", "GOLD24K", "IR_GOLD_24K"],
+  EMAMI_COIN: ["EMAMI_COIN", "IR_COIN_EMAMI", "COIN_EMAMI", "EMAMI"],
+  BAHAR_COIN: ["BAHAR_COIN", "IR_COIN_BAHAR", "COIN_BAHAR", "BAHAR"],
+  HALF_COIN: ["HALF_COIN", "IR_COIN_HALF", "COIN_HALF", "HALF"],
+  QUARTER_COIN: ["QUARTER_COIN", "IR_COIN_QUARTER", "COIN_QUARTER", "QUARTER"],
+  GERMI_COIN: ["GERMI_COIN", "IR_COIN_GERMI", "COIN_GERMI", "GERMI"],
+  XAUUSD: ["XAUUSD", "XAU_USD", "XAU", "GOLD_OUNCE"],
+  XAGUSD: ["XAGUSD", "XAG_USD", "XAG", "SILVER_OUNCE"],
+  BRENT: ["BRENT", "BRENT_CRUDE"],
+  WTI: ["WTI", "WTI_CRUDE"],
+  CU: ["CU", "COPPER"],
+  TEDPIX: ["TEDPIX", "BOURSE", "INDEX"],
+  TEPIX_EW: ["TEPIX_EW", "EQUAL_WEIGHT"],
+  IFX: ["IFX", "FARABOURSE"],
+  FOULAD: ["FOULAD"],
+  FAMILI: ["FAMILI"],
+  SHASTA: ["SHASTA"],
+  FARS: ["FARS"],
+  WEBMELAT: ["WEBMELAT"],
+};
 
 export default async function MarketSymbolDetailPage({ params }: Props) {
   const { symbol } = await params;
-  const upperSymbol = symbol.toUpperCase();
+  const upperSymbol = decodeURIComponent(symbol).toUpperCase().trim();
 
-  const instrument = SUPPORTED_INSTRUMENTS.find(
-    (i) => i.symbol.toUpperCase() === upperSymbol
-  );
+  const aliases = SYMBOL_ALIASES[upperSymbol] || [upperSymbol];
+  const instrument =
+    SUPPORTED_INSTRUMENTS.find((i) => i.symbol.toUpperCase() === upperSymbol) ||
+    SUPPORTED_INSTRUMENTS.find((i) =>
+      aliases.some((a) => a.toUpperCase() === i.symbol.toUpperCase()),
+    );
 
   if (!instrument) {
     notFound();
   }
 
-  // Attempt to fetch current synchronized rate from webApi
+  // Fetch current synchronized rate from webApi without server cache
   let quote: MarketQuote | null = null;
   try {
     const marketRates = await webApi.getMarketRates();
@@ -46,16 +89,40 @@ export default async function MarketSymbolDetailPage({ params }: Props) {
       ...(marketRates.currencies || []),
       ...(marketRates.cryptocurrency || []),
       ...(marketRates.commodities || []),
+      ...(marketRates.stocks || []),
     ];
-    quote = allQuotes.find((q) => q.symbol.toUpperCase() === upperSymbol) || null;
+    const targetSymbol = instrument.symbol.toUpperCase();
+    const targetAliases = SYMBOL_ALIASES[targetSymbol] || [targetSymbol];
+    quote =
+      allQuotes.find((q) =>
+        targetAliases.some((a) => a.toUpperCase() === q.symbol.toUpperCase()),
+      ) ||
+      allQuotes.find(
+        (q) =>
+          q.symbol.toUpperCase().replace(/[^A-Z0-9]/g, "") ===
+          targetSymbol.replace(/[^A-Z0-9]/g, ""),
+      ) ||
+      null;
   } catch {
     quote = null;
   }
 
   const dashboardUrl = (process.env.NEXT_PUBLIC_DASHBOARD_URL || "http://localhost:3000").replace(/\/+$/, "");
-  const hasPrice = quote?.price !== null && quote?.price !== undefined;
-  const isPos = ((quote?.change_percent || 0) >= 0);
-  const priceNum = hasPrice ? Number(quote!.price) : null;
+  const rawPrice = quote?.price ?? null;
+  const hasPrice = rawPrice !== null && rawPrice !== undefined && rawPrice !== "";
+  const priceNum = hasPrice
+    ? typeof rawPrice === "string"
+      ? Number(rawPrice.replace(/,/g, "").trim())
+      : Number(rawPrice)
+    : null;
+
+  const chgPercent =
+    quote?.change_percent !== null && quote?.change_percent !== undefined
+      ? Number(quote.change_percent)
+      : null;
+  const isPos = chgPercent !== null && chgPercent >= 0;
+  const isUsd = instrument.unit === "دلار" || instrument.unit === "USD" || instrument.unit === "$";
+  const decimals = isUsd && priceNum !== null ? (priceNum < 100 && priceNum % 1 !== 0 ? 2 : 0) : 0;
 
   return (
     <div className="min-h-screen py-10 md:py-16">
@@ -109,10 +176,10 @@ export default async function MarketSymbolDetailPage({ params }: Props) {
               <div className="flex items-baseline gap-2">
                 {hasPrice && priceNum !== null ? (
                   <>
-                    <span className="text-3xl sm:text-4xl font-black text-[#F0F0F1] font-mono">
-                      {instrument.unit === "دلار"
-                        ? `$${priceNum.toLocaleString("en-US")}`
-                        : priceNum.toLocaleString("en-US")}
+                    <span className="text-3xl sm:text-4xl font-black text-[#F0F0F1] font-mono tabular-nums" dir="ltr">
+                      {isUsd
+                        ? `$${formatPriceNumber(priceNum, decimals)}`
+                        : formatPriceNumber(Math.round(priceNum))}
                     </span>
                     <span className="text-xs text-[#F0AE55] font-semibold">
                       {instrument.unit}
@@ -126,28 +193,26 @@ export default async function MarketSymbolDetailPage({ params }: Props) {
               </div>
 
               {/* Change badge */}
-              {hasPrice && (
+              {hasPrice && chgPercent !== null && (
                 <div
                   className={cn(
-                    "px-3 py-1 rounded-[8px] text-xs font-bold inline-flex items-center gap-1.5 mt-1",
+                    "px-3 py-1 rounded-[8px] text-xs font-bold inline-flex items-center gap-1.5 mt-1 font-mono tabular-nums",
                     isPos
                       ? "bg-[#76A98C]/15 text-[#76A98C] border border-[#76A98C]/30"
                       : "bg-[#C77A82]/15 text-[#C77A82] border border-[#C77A82]/30"
                   )}
+                  dir="ltr"
                 >
                   {isPos ? (
                     <TrendingUp className="w-3.5 h-3.5 stroke-[2.5]" />
                   ) : (
                     <TrendingDown className="w-3.5 h-3.5 stroke-[2.5]" />
                   )}
-                  <span dir="ltr">
+                  <span>
                     {isPos ? "+" : ""}
-                    {quote?.change_percent !== null && quote?.change_percent !== undefined
-                      ? quote.change_percent.toFixed(2)
-                      : "0.00"}
-                    %
+                    {chgPercent.toFixed(2)}%
                   </span>
-                  <span className="text-[10px] opacity-80">در ۲۴ ساعت گذشته</span>
+                  <span className="text-[10px] opacity-80 font-sans">در ۲۴ ساعت گذشته</span>
                 </div>
               )}
             </div>
@@ -178,11 +243,11 @@ export default async function MarketSymbolDetailPage({ params }: Props) {
             </div>
             <div className="space-y-1">
               <span className="text-[11px] text-[#707581]">معادل تومانی تقریبی</span>
-              <p className="text-sm font-semibold text-[#F0AE55] font-mono">
+              <p className="text-sm font-semibold text-[#F0AE55] font-mono tabular-nums" dir="ltr">
                 {quote?.price_toman
-                  ? `${Number(quote.price_toman).toLocaleString("en-US")} ت`
+                  ? `${formatPriceNumber(Math.round(Number(quote.price_toman)))} ت`
                   : hasPrice && priceNum !== null
-                    ? `${priceNum.toLocaleString("en-US")} ت`
+                    ? `${formatPriceNumber(Math.round(priceNum))} ت`
                     : "—"}
               </p>
             </div>

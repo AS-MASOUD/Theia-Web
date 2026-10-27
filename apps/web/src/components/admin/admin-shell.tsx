@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -33,8 +33,14 @@ export function AdminShell({ children }: AdminShellProps) {
     useAdminAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated && pathname !== "/admin/login") {
+      router.push("/admin/login");
+    }
+  }, [isLoading, isAuthenticated, pathname, router]);
+
   // If loading or not authenticated, handle gracefully
-  if (isLoading) {
+  if (isLoading || (!isAuthenticated && pathname !== "/admin/login")) {
     return (
       <div className="min-h-screen bg-[#0D0E10] flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
@@ -43,13 +49,6 @@ export function AdminShell({ children }: AdminShellProps) {
         </div>
       </div>
     );
-  }
-
-  if (!isAuthenticated && pathname !== "/admin/login") {
-    if (typeof window !== "undefined") {
-      router.push("/admin/login");
-    }
-    return null;
   }
 
   // Navigation Items with RBAC visibility

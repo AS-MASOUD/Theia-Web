@@ -10,9 +10,6 @@ export interface TickerConfigItem {
   symbol: string;
   name: string;
   unit?: string;
-  defaultPrice: number;
-  defaultChangePct: number;
-  defaultChangeVal?: number;
   isIndex?: boolean;
 }
 
@@ -20,65 +17,41 @@ export const DEFAULT_TICKERS: TickerConfigItem[] = [
   {
     symbol: "TEDPIX",
     name: "بورس",
-    defaultPrice: 2154363,
-    defaultChangePct: -1.71,
-    defaultChangeVal: -135881,
     isIndex: true,
   },
   {
     symbol: "XAUUSD",
     name: "انس طلا",
-    defaultPrice: 2720.5,
-    defaultChangePct: -0.2,
-    defaultChangeVal: -7.87,
     unit: "$",
   },
   {
     symbol: "IR_MITHQAL",
     name: "مثقال طلا",
-    defaultPrice: 18995000,
-    defaultChangePct: 0.27,
-    defaultChangeVal: 51200,
     unit: "تومان",
   },
   {
     symbol: "IR_GOLD_18K",
     name: "طلا ۱۸",
-    defaultPrice: 4385000,
-    defaultChangePct: 0.3,
-    defaultChangeVal: 13155,
     unit: "تومان",
   },
   {
     symbol: "EMAMI_COIN",
     name: "سکه",
-    defaultPrice: 51200000,
-    defaultChangePct: 0.71,
-    defaultChangeVal: 363520,
     unit: "تومان",
   },
   {
     symbol: "USD",
     name: "دلار",
-    defaultPrice: 94850,
-    defaultChangePct: 0.25,
-    defaultChangeVal: 237,
     unit: "تومان",
   },
   {
     symbol: "BRENT",
     name: "نفت برنت",
-    defaultPrice: 74.8,
-    defaultChangePct: 0.78,
-    defaultChangeVal: 0.58,
     unit: "$",
   },
   {
     symbol: "USDT",
     name: "تتر",
-    defaultPrice: 95100,
-    defaultChangePct: 0.0,
-    defaultChangeVal: 0,
     unit: "تومان",
   },
 ];
@@ -88,36 +61,80 @@ interface HighlightTickerStripProps {
   usdRate?: number;
 }
 
+const SYMBOL_ALIASES: Record<string, string[]> = {
+  USD: ["USD", "USD_IRR", "DOLLAR"],
+  IR_GOLD_18K: ["IR_GOLD_18K", "GOLD_18K", "GOLD18K"],
+  IR_MITHQAL: ["IR_MITHQAL", "MITHQAL", "MITHQAL_GOLD"],
+  EMAMI_COIN: ["EMAMI_COIN", "IR_COIN_EMAMI", "COIN_EMAMI", "EMAMI"],
+  XAUUSD: ["XAUUSD", "XAU_USD", "XAU", "GOLD_OUNCE"],
+  BRENT: ["BRENT", "BRENT_CRUDE"],
+  USDT: ["USDT", "USDT_IRT", "TETHER"],
+  TEDPIX: ["TEDPIX", "BOURSE", "INDEX"],
+  BTC: ["BTC", "BTC_USD", "BITCOIN", "BTCUSDT"],
+  ETH: ["ETH", "ETH_USD", "ETHEREUM", "ETHUSDT"],
+};
+
 export function HighlightTickerStrip({
   quotes = [],
   usdRate,
 }: HighlightTickerStripProps) {
   const items = useMemo(() => {
-    const gold18kQuote = quotes.find((q) => q.symbol === "IR_GOLD_18K");
+    const gold18kQuote = quotes.find(
+      (q) =>
+        q.symbol === "IR_GOLD_18K" ||
+        q.symbol === "GOLD_18K" ||
+        q.symbol === "GOLD18K",
+    );
     const gold18kPrice = gold18kQuote?.price
-      ? Number(gold18kQuote.price)
-      : 4385000;
+      ? typeof gold18kQuote.price === "string"
+        ? Number(gold18kQuote.price.replace(/,/g, ""))
+        : Number(gold18kQuote.price)
+      : null;
 
     return DEFAULT_TICKERS.map((cfg) => {
-      const q = quotes.find(
-        (quote) =>
-          quote.symbol.toUpperCase() === cfg.symbol.toUpperCase() ||
-          (cfg.symbol === "TEDPIX" &&
-            (quote.symbol === "BOURSE" || quote.symbol === "TEDPIX")),
+      const aliases = SYMBOL_ALIASES[cfg.symbol] || [cfg.symbol];
+      const q = quotes.find((quote) =>
+        aliases.some(
+          (alias) => alias.toUpperCase() === quote.symbol.toUpperCase(),
+        ),
       );
 
-      let price = cfg.defaultPrice;
-      let changePercent = cfg.defaultChangePct;
-      let changeVal = cfg.defaultChangeVal ?? 0;
+      let price: number | null = null;
+      let changePercent = 0;
+      let changeVal = 0;
 
-      if (q && q.price !== null && q.price !== undefined) {
-        price = Number(q.price);
+      if (q && q.price !== null && q.price !== undefined && q.price !== "") {
+        const rawPrice =
+          typeof q.price === "string"
+            ? Number(q.price.replace(/,/g, "").trim())
+            : Number(q.price);
+
+        // Convert if unit mismatch (e.g. USDT is in USD, but ticker is in Toman)
+        if (
+          cfg.unit === "تومان" &&
+          (q.unit === "دلار" || q.unit === "USD" || q.unit === "$")
+        ) {
+          price =
+            q.price_toman != null
+              ? typeof q.price_toman === "string"
+                ? Number(q.price_toman.replace(/,/g, ""))
+                : Number(q.price_toman)
+              : Math.round(rawPrice * (usdRate || 94850));
+        } else if (
+          cfg.unit === "$" &&
+          (q.unit === "تومان" || q.unit === "IRT")
+        ) {
+          price = Number((rawPrice / (usdRate || 94850)).toFixed(2));
+        } else {
+          price = rawPrice;
+        }
+
         if (q.change_percent !== null && q.change_percent !== undefined) {
           changePercent = Number(q.change_percent);
         }
         if (q.change_value !== null && q.change_value !== undefined) {
           changeVal = Number(q.change_value);
-        } else {
+        } else if (price !== null) {
           const isDecimal = cfg.unit === "$" || cfg.isIndex || price < 1000;
           const delta = (price * changePercent) / 100;
           changeVal = isDecimal ? Number(delta.toFixed(2)) : Math.round(delta);
@@ -139,13 +156,16 @@ export function HighlightTickerStrip({
       const sign = isPos ? "+" : isNeg ? "-" : "";
 
       // Format price string in English digits
-      const isDecimalUnit = cfg.unit === "$" || (price < 1000 && !cfg.isIndex);
-      const formattedPrice = isDecimalUnit
-        ? price.toLocaleString("en-US", {
-            minimumFractionDigits: price % 1 === 0 ? 0 : 2,
-            maximumFractionDigits: 2,
-          })
-        : price.toLocaleString("en-US", { maximumFractionDigits: 0 });
+      const isDecimalUnit = cfg.unit === "$" || (price !== null && price < 1000 && !cfg.isIndex);
+      const formattedPrice =
+        price !== null
+          ? isDecimalUnit
+            ? price.toLocaleString("en-US", {
+                minimumFractionDigits: price % 1 === 0 ? 0 : 2,
+                maximumFractionDigits: 2,
+              })
+            : price.toLocaleString("en-US", { maximumFractionDigits: 0 })
+          : "—";
 
       // Format change value in English digits
       const absVal = Math.abs(changeVal);

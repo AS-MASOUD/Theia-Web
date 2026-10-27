@@ -9,10 +9,6 @@ export interface InstrumentMetadata {
   unit: string;
   description: string;
   formula?: string;
-  defaultPrice?: number;
-  defaultChangePct?: number;
-  defaultChangeVal?: number;
-  price_toman?: number;
 }
 
 export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
@@ -24,9 +20,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "gold_coin",
     sub_group: "raw_gold",
     unit: "تومان",
-    defaultPrice: 4385000,
-    defaultChangePct: 1.45,
-    defaultChangeVal: 63580,
     description: "هر گرم طلای آب‌شده ۱۸ عیار استاندارد بازار طلا و جواهر تهران.",
     formula: "(انس طلا × نرخ دلار آزاد ÷ ۳۱.۱۰۳۵) × (۷۵۰ ÷ ۹۹۹.۹) + کارمزد و سود مرجع",
   },
@@ -37,9 +30,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "gold_coin",
     sub_group: "raw_gold",
     unit: "تومان",
-    defaultPrice: 18995000,
-    defaultChangePct: 0.27,
-    defaultChangeVal: 51200,
     description: "یک مثقال طلای ۱۷ عیار (معادل ۴.۶۰۸ گرم) مبنای مظنه سنتی بازار تهران.",
     formula: "طلای ۱۸ عیار × ۴.۳۳۱۸",
   },
@@ -50,9 +40,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "gold_coin",
     sub_group: "raw_gold",
     unit: "تومان",
-    defaultPrice: 5846000,
-    defaultChangePct: 1.30,
-    defaultChangeVal: 76000,
     description: "هر گرم طلای خالص شمش ۲۴ عیار با عیار ۹۹۹.۹ استاندارد بین‌المللی.",
   },
   {
@@ -62,9 +49,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "gold_coin",
     sub_group: "full_coins",
     unit: "تومان",
-    defaultPrice: 51200000,
-    defaultChangePct: 1.82,
-    defaultChangeVal: 916000,
     description: "مسکوک طلای بهار آزادی طرح امام با عیار ۹۰۰ در هزار و وزن ۸.۱۳۳ گرم.",
     formula: "قیمت ذاتی طلا + حباب قیمتی بازار عرضه و تقاضا",
   },
@@ -75,9 +59,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "gold_coin",
     sub_group: "full_coins",
     unit: "تومان",
-    defaultPrice: 45600000,
-    defaultChangePct: 0.95,
-    defaultChangeVal: 433000,
     description: "مسکوک رسمی طلای طرح قدیم با وزن ۸.۱۳۳ گرم و عیار ۲۱.۶ (۹۰۰ در هزار).",
   },
   {
@@ -87,9 +68,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "gold_coin",
     sub_group: "fractional_coins",
     unit: "تومان",
-    defaultPrice: 26800000,
-    defaultChangePct: 1.15,
-    defaultChangeVal: 308000,
     description: "نیم سکه بهار آزادی با وزن ۴.۰۶۶ گرم و عیار ۹۰۰ در هزار.",
   },
   {
@@ -99,9 +77,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "gold_coin",
     sub_group: "fractional_coins",
     unit: "تومان",
-    defaultPrice: 17400000,
-    defaultChangePct: 2.10,
-    defaultChangeVal: 365000,
     description: "ربع سکه بهار آزادی با وزن ۲.۰۳۳ گرم و عیار ۹۰۰ در هزار.",
   },
   {
@@ -111,9 +86,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "gold_coin",
     sub_group: "fractional_coins",
     unit: "تومان",
-    defaultPrice: 8200000,
-    defaultChangePct: 0.60,
-    defaultChangeVal: 49000,
     description: "سکه رسمی یک گرمی ضرب بانک مرکزی جمهوری اسلامی ایران.",
   },
   {
@@ -123,10 +95,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "gold_coin",
     sub_group: "fractional_coins",
     unit: "دلار",
-    defaultPrice: 2720.5,
-    defaultChangePct: 0.65,
-    defaultChangeVal: 17.68,
-    price_toman: 258039425,
     description: "نرخ شاخص جهانی هر تروی انس طلای خالص ۲۴ عیار (۳۱.۱۰۳۵ گرم).",
   },
 
@@ -138,9 +106,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "currency",
     sub_group: "major_fx",
     unit: "تومان",
-    defaultPrice: 94850,
-    defaultChangePct: 0.75,
-    defaultChangeVal: 710,
     description: "اسکناس دلار نقدی بازار غیربانکی تهران.",
   },
   {
@@ -150,9 +115,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "currency",
     sub_group: "major_fx",
     unit: "تومان",
-    defaultPrice: 25850,
-    defaultChangePct: 0.68,
-    defaultChangeVal: 175,
     description: "حواله و اسکناس درهم دبی، پایه اصلی تسویه بازرگانی ایران.",
     formula: "برابری درهم به دلار با ضریب پیوند ثابت ۳.۶۷۲۵",
   },
@@ -163,9 +125,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "currency",
     sub_group: "major_fx",
     unit: "تومان",
-    defaultPrice: 103200,
-    defaultChangePct: 0.42,
-    defaultChangeVal: 433,
     description: "اسکناس رسمی حوزه اقتصادی اروپا.",
   },
   {
@@ -175,9 +134,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "currency",
     sub_group: "major_fx",
     unit: "تومان",
-    defaultPrice: 13320,
-    defaultChangePct: 0.22,
-    defaultChangeVal: 29,
     description: "اسکناس و حواله رنمینبی جمهوری خلق چین.",
   },
   {
@@ -187,9 +143,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "currency",
     sub_group: "global_fx",
     unit: "تومان",
-    defaultPrice: 123800,
-    defaultChangePct: -0.15,
-    defaultChangeVal: -185,
     description: "اسکناس پوند استرلینگ بریتانیا.",
   },
   {
@@ -199,9 +152,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "currency",
     sub_group: "global_fx",
     unit: "تومان",
-    defaultPrice: 109400,
-    defaultChangePct: 0.55,
-    defaultChangeVal: 601,
     description: "اسکناس رسمی کشور سوئیس، پناهگاه امن سرمایه.",
   },
   {
@@ -211,9 +161,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "currency",
     sub_group: "global_fx",
     unit: "تومان",
-    defaultPrice: 68900,
-    defaultChangePct: 0.30,
-    defaultChangeVal: 206,
     description: "اسکناس دلار کانادا.",
   },
   {
@@ -223,9 +170,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "currency",
     sub_group: "regional_fx",
     unit: "تومان",
-    defaultPrice: 2780,
-    defaultChangePct: -0.85,
-    defaultChangeVal: -24,
     description: "اسکناس لیر ترکیه.",
   },
   {
@@ -235,9 +179,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "currency",
     sub_group: "regional_fx",
     unit: "تومان",
-    defaultPrice: 7240,
-    defaultChangePct: 0.45,
-    defaultChangeVal: 32,
     description: "اسکناس ۱۰۰ دینار عراق، شاخص سفرهای زیارتی و مبادلات مرزی.",
   },
   {
@@ -247,9 +188,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "currency",
     sub_group: "regional_fx",
     unit: "تومان",
-    defaultPrice: 25290,
-    defaultChangePct: 0.70,
-    defaultChangeVal: 177,
     description: "اسکناس رسمی پادشاهی عربستان سعودی.",
   },
 
@@ -261,9 +199,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "stock",
     sub_group: "market_indices",
     unit: "واحد",
-    defaultPrice: 2154363,
-    defaultChangePct: -1.71,
-    defaultChangeVal: -135881,
     description: "شاخص کل بازده نقدی و قیمت بورس اوراق بهادار تهران.",
   },
   {
@@ -273,9 +208,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "stock",
     sub_group: "market_indices",
     unit: "واحد",
-    defaultPrice: 698420,
-    defaultChangePct: -0.85,
-    defaultChangeVal: -5936,
     description: "شاخص هم‌وزن قیمت و بازده نقدی بورس تهران بدون احتساب وزن مارکت کپ.",
   },
   {
@@ -285,9 +217,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "stock",
     sub_group: "market_indices",
     unit: "واحد",
-    defaultPrice: 21850,
-    defaultChangePct: -1.12,
-    defaultChangeVal: -244,
     description: "شاخص کل فرابورس ایران نمایانگر وضعیت عمومی شرکت‌های فرابورسی.",
   },
   {
@@ -297,9 +226,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "stock",
     sub_group: "metals_mining",
     unit: "ریال",
-    defaultPrice: 5420,
-    defaultChangePct: 1.88,
-    defaultChangeVal: 100,
     description: "بزرگترین مجتمع فولادسازی کشور و از نمادهای تاثیرگذار بازار سرمایه.",
   },
   {
@@ -309,9 +235,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "stock",
     sub_group: "metals_mining",
     unit: "ریال",
-    defaultPrice: 6850,
-    defaultChangePct: 2.24,
-    defaultChangeVal: 150,
     description: "شرکت ملی صنایع مس ایران، از بزرگترین تولیدکنندگان مس خاورمیانه.",
   },
   {
@@ -321,9 +244,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "stock",
     sub_group: "petro_holdings",
     unit: "ریال",
-    defaultPrice: 1210,
-    defaultChangePct: -0.82,
-    defaultChangeVal: -10,
     description: "بزرگ‌ترین هلدینگ سرمایه‌گذاری چندرشته‌ای صنعتی کشور.",
   },
   {
@@ -333,9 +253,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "stock",
     sub_group: "petro_holdings",
     unit: "ریال",
-    defaultPrice: 11400,
-    defaultChangePct: 0.88,
-    defaultChangeVal: 100,
     description: "بزرگ‌ترین هلدینگ پتروشیمی کشور و دارنده بالاترین ارزش بازار بورس.",
   },
   {
@@ -345,9 +262,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "stock",
     sub_group: "petro_holdings",
     unit: "ریال",
-    defaultPrice: 2340,
-    defaultChangePct: 1.30,
-    defaultChangeVal: 30,
     description: "از بزرگ‌ترین و نقدشونده‌ترین نمادهای بانکی و مالی بورس تهران.",
   },
 
@@ -359,10 +273,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "crypto",
     sub_group: "l1_crypto",
     unit: "دلار",
-    defaultPrice: 68450,
-    defaultChangePct: 3.25,
-    defaultChangeVal: 2224.6,
-    price_toman: 6492482500,
     description: "نخستین دارایی رمزنگاری‌شده غیرمتمرکز جهان با سقف عرضه ۲۱ میلیون واحد.",
   },
   {
@@ -372,10 +282,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "crypto",
     sub_group: "l1_crypto",
     unit: "دلار",
-    defaultPrice: 2640,
-    defaultChangePct: 2.15,
-    defaultChangeVal: 56.76,
-    price_toman: 250404000,
     description: "بستر محاسباتی قراردادهای هوشمند و امور مالی غیرمتمرکز (DeFi).",
   },
   {
@@ -385,10 +291,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "crypto",
     sub_group: "l1_crypto",
     unit: "دلار",
-    defaultPrice: 154.2,
-    defaultChangePct: 4.80,
-    defaultChangeVal: 7.4,
-    price_toman: 14625870,
     description: "بلاکچین لایه اول پرسرعت برای برنامه‌های غیرمتمرکز مالی.",
   },
   {
@@ -398,10 +300,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "crypto",
     sub_group: "stablecoins",
     unit: "دلار",
-    defaultPrice: 1.0,
-    defaultChangePct: 0.05,
-    defaultChangeVal: 0.0005,
-    price_toman: 95100,
     description: "استیبل‌کوین متصل به برابری یک به یک با دلار آمریکا.",
   },
   {
@@ -411,10 +309,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "crypto",
     sub_group: "stablecoins",
     unit: "دلار",
-    defaultPrice: 1.0,
-    defaultChangePct: 0.01,
-    defaultChangeVal: 0.0001,
-    price_toman: 94900,
     description: "استیبل‌کوین با پشتوانه نقدی کامل و تحت نظارت ارزی سیرکل.",
   },
   {
@@ -424,10 +318,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "crypto",
     sub_group: "altcoins",
     unit: "دلار",
-    defaultPrice: 595.0,
-    defaultChangePct: 1.05,
-    defaultChangeVal: 6.25,
-    price_toman: 56435750,
     description: "توکن بومی زنجیره بایننس و صرافی بین‌المللی بایننس.",
   },
   {
@@ -437,10 +327,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "crypto",
     sub_group: "altcoins",
     unit: "دلار",
-    defaultPrice: 5.25,
-    defaultChangePct: -1.20,
-    defaultChangeVal: -0.06,
-    price_toman: 497962,
     description: "رمز ارز اکوسیستم باز تلگرام با یکپارچگی پرداخت درون برنامه‌ای.",
   },
   {
@@ -450,10 +336,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "crypto",
     sub_group: "altcoins",
     unit: "دلار",
-    defaultPrice: 0.54,
-    defaultChangePct: 2.80,
-    defaultChangeVal: 0.015,
-    price_toman: 51219,
     description: "دارایی دیجیتال شبکه تسویه بین‌بانکی ریپل نت.",
   },
 
@@ -465,9 +347,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "commodity",
     sub_group: "energy",
     unit: "دلار",
-    defaultPrice: 74.8,
-    defaultChangePct: -1.10,
-    defaultChangeVal: -0.83,
     description: "شاخص مرجع بین‌المللی قیمت نفت خام سبک و شیرین.",
   },
   {
@@ -477,9 +356,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "commodity",
     sub_group: "energy",
     unit: "دلار",
-    defaultPrice: 70.4,
-    defaultChangePct: -1.35,
-    defaultChangeVal: -0.96,
     description: "شاخص نفت سبک آمریکا در بورس کالای نیویورک.",
   },
   {
@@ -489,9 +365,6 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "commodity",
     sub_group: "precious_metals",
     unit: "دلار",
-    defaultPrice: 32.4,
-    defaultChangePct: 1.60,
-    defaultChangeVal: 0.51,
     description: "نرخ هر انس نقره خالص جهانی در بازارهای بین‌المللی.",
   },
   {
@@ -501,15 +374,12 @@ export const SUPPORTED_INSTRUMENTS: InstrumentMetadata[] = [
     category: "commodity",
     sub_group: "industrial_metals",
     unit: "دلار",
-    defaultPrice: 9680.0,
-    defaultChangePct: -0.45,
-    defaultChangeVal: -43.8,
     description: "فلز صنعتی مس بورس فلزات لندن (LME).",
   },
 ];
 
 /**
- * Fallback values lookup dictionary indexed by symbol.
+ * Fallback values lookup dictionary indexed by symbol (Metadata only, zero hardcoded prices).
  */
 export const INSTRUMENT_FALLBACKS: Record<string, InstrumentMetadata> =
   SUPPORTED_INSTRUMENTS.reduce(

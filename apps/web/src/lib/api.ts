@@ -41,6 +41,7 @@ function getAuthHeader(): Record<string, string> {
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const url = `${API_BASE}/api/v1${endpoint}`;
   const res = await fetch(url, {
+    cache: "no-store",
     ...options,
     credentials: "include",
     headers: {

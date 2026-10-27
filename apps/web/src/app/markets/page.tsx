@@ -17,8 +17,8 @@ export default function MarketsHubPage() {
   const { data: marketData } = useQuery<MarketRatesResponse>({
     queryKey: ["public-market-rates"],
     queryFn: () => webApi.getMarketRates(),
-    initialData: getInitialMarketCatalog(),
-    refetchInterval: 30000,
+    staleTime: 0,
+    refetchInterval: 15000,
   });
 
   const allQuotes: MarketQuote[] = useMemo(() => {

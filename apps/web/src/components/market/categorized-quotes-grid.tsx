@@ -148,9 +148,70 @@ export function CategorizedQuotesGrid({
     };
   }, [isCategoryDropdownOpen]);
 
+const SYMBOL_ALIASES: Record<string, string[]> = {
+  USD: ["USD", "USD_IRR", "DOLLAR"],
+  EUR: ["EUR", "EUR_IRR"],
+  AED: ["AED", "AED_IRR", "DIRHAM"],
+  GBP: ["GBP", "GBP_IRR"],
+  TRY: ["TRY", "TRY_IRR"],
+  CNY: ["CNY", "CNY_IRR"],
+  CAD: ["CAD", "CAD_IRR"],
+  CHF: ["CHF", "CHF_IRR"],
+  IQD: ["IQD", "IQD_IRR"],
+  SAR: ["SAR", "SAR_IRR"],
+  AUD: ["AUD", "AUD_IRR"],
+  BTC: ["BTC", "BTC_USD", "BITCOIN"],
+  ETH: ["ETH", "ETH_USD", "ETHEREUM"],
+  USDT: ["USDT", "USDT_IRT", "USDT_USD", "TETHER"],
+  SOL: ["SOL", "SOL_USD", "SOLANA"],
+  BNB: ["BNB", "BNB_USD", "BINANCE_COIN"],
+  TON: ["TON", "TON_USD", "TONCOIN"],
+  XRP: ["XRP", "XRP_USD", "RIPPLE"],
+  USDC: ["USDC", "USDC_USD"],
+  IR_GOLD_18K: ["IR_GOLD_18K", "GOLD_18K", "GOLD18K"],
+  IR_MITHQAL: ["IR_MITHQAL", "MITHQAL", "MITHQAL_GOLD"],
+  GOLD_24K: ["GOLD_24K", "GOLD24K", "IR_GOLD_24K"],
+  EMAMI_COIN: ["EMAMI_COIN", "IR_COIN_EMAMI", "COIN_EMAMI", "EMAMI"],
+  BAHAR_COIN: ["BAHAR_COIN", "IR_COIN_BAHAR", "COIN_BAHAR", "BAHAR"],
+  HALF_COIN: ["HALF_COIN", "IR_COIN_HALF", "COIN_HALF", "HALF"],
+  QUARTER_COIN: ["QUARTER_COIN", "IR_COIN_QUARTER", "COIN_QUARTER", "QUARTER"],
+  GERMI_COIN: ["GERMI_COIN", "IR_COIN_GERMI", "COIN_GERMI", "GERMI"],
+  XAUUSD: ["XAUUSD", "XAU_USD", "XAU", "GOLD_OUNCE"],
+  XAGUSD: ["XAGUSD", "XAG_USD", "XAG", "SILVER_OUNCE"],
+  BRENT: ["BRENT", "BRENT_CRUDE"],
+  WTI: ["WTI", "WTI_CRUDE"],
+  CU: ["CU", "COPPER"],
+  TEDPIX: ["TEDPIX", "BOURSE", "INDEX"],
+  TEPIX_EW: ["TEPIX_EW", "EQUAL_WEIGHT"],
+  IFX: ["IFX", "FARABOURSE"],
+  FOULAD: ["FOULAD"],
+  FAMILI: ["FAMILI"],
+  SHASTA: ["SHASTA"],
+  FARS: ["FARS"],
+  WEBMELAT: ["WEBMELAT"],
+};
+
+  // Helper to find quote with symbol alias and fuzzy resilience
+  const findLiveQuote = (symbol: string): MarketQuote | undefined => {
+    const upper = symbol.toUpperCase();
+    const direct = quotes.find((q) => q.symbol.toUpperCase() === upper);
+    if (direct) return direct;
+
+    const aliases = SYMBOL_ALIASES[upper] || [];
+    const aliasMatch = quotes.find((q) =>
+      aliases.some((a) => a.toUpperCase() === q.symbol.toUpperCase()),
+    );
+    if (aliasMatch) return aliasMatch;
+
+    const stripped = upper.replace(/[^A-Z0-9]/g, "");
+    return quotes.find(
+      (q) => q.symbol.toUpperCase().replace(/[^A-Z0-9]/g, "") === stripped,
+    );
+  };
+
   // Helper to resolve effective quote with reliable fallback numbers
   const resolveQuote = (symbol: string): MarketQuote => {
-    const live = quotes.find((q) => q.symbol === symbol);
+    const live = findLiveQuote(symbol);
     const fallback: InstrumentMetadata | undefined =
       INSTRUMENT_FALLBACKS[symbol];
 
@@ -160,38 +221,59 @@ export function CategorizedQuotesGrid({
       live.price !== undefined &&
       live.price !== ""
     ) {
+      const parsedPrice =
+        typeof live.price === "string"
+          ? Number(live.price.replace(/,/g, "").trim())
+          : Number(live.price);
+
+      const chgPct =
+        live.change_percent !== null && live.change_percent !== undefined
+          ? Number(live.change_percent)
+          : 0;
+
+      const calculatedChgVal =
+        live.change_value != null
+          ? typeof live.change_value === "string"
+            ? Number(live.change_value.replace(/,/g, ""))
+            : Number(live.change_value)
+          : (parsedPrice * chgPct) / 100;
+
+      const calculatedToman =
+        live.price_toman != null
+          ? typeof live.price_toman === "string"
+            ? Number(live.price_toman.replace(/,/g, ""))
+            : Number(live.price_toman)
+          : (fallback?.unit === "دلار" || live.unit === "دلار")
+            ? Math.round(parsedPrice * usdRate)
+            : parsedPrice;
+
       return {
         ...live,
-        change_value: live.change_value ?? fallback?.defaultChangeVal ?? null,
+        symbol: fallback?.symbol || live.symbol,
+        name: fallback?.name || live.name,
+        name_en: fallback?.name_en || live.name_en,
+        category: fallback?.category || live.category,
+        price: parsedPrice,
+        unit: fallback?.unit || live.unit || "تومان",
+        change_percent: chgPct,
+        change_value: calculatedChgVal,
+        price_toman: calculatedToman,
+        status: live.status || "live",
       };
     }
 
-    if (fallback) {
-      return {
-        symbol: fallback.symbol,
-        name: fallback.name,
-        name_en: fallback.name_en,
-        category: fallback.category,
-        price: fallback.defaultPrice ?? null,
-        unit: fallback.unit,
-        change_percent: fallback.defaultChangePct ?? 0,
-        change_value: fallback.defaultChangeVal ?? null,
-        price_toman: fallback.price_toman ?? null,
-        status: "live",
-      };
-    }
-
-    return (
-      live || {
-        symbol,
-        name: symbol,
-        category: "currency",
-        price: 0,
-        unit: "تومان",
-        change_percent: 0,
-        status: "unavailable",
-      }
-    );
+    return {
+      symbol: fallback?.symbol || symbol,
+      name: fallback?.name || symbol,
+      name_en: fallback?.name_en || symbol,
+      category: fallback?.category || "currency",
+      price: null,
+      unit: fallback?.unit || "تومان",
+      change_percent: null,
+      change_value: null,
+      price_toman: null,
+      status: "unavailable",
+    };
   };
 
   // 1. Definition for the 3 Cards when selectedCategory === "all"
@@ -793,8 +875,25 @@ export function CategorizedQuotesGrid({
                     </div>
                   ) : (
                     group.items.map((item) => {
-                      const isPos = (item.change_percent || 0) >= 0;
-                      const priceNum = Number(item.price || 0);
+                      const chgPercent =
+                        item.change_percent !== null &&
+                        item.change_percent !== undefined
+                          ? Number(item.change_percent)
+                          : 0;
+                      const isPos = chgPercent >= 0;
+                      const priceNum =
+                        typeof item.price === "string"
+                          ? Number(item.price.replace(/,/g, "").trim())
+                          : Number(item.price || 0);
+                      const isUsd =
+                        item.unit === "دلار" ||
+                        item.unit === "USD" ||
+                        item.unit === "$";
+                      const decimals = isUsd
+                        ? priceNum < 100 && priceNum % 1 !== 0
+                          ? 2
+                          : 0
+                        : 0;
 
                       return (
                         <Link
@@ -821,44 +920,54 @@ export function CategorizedQuotesGrid({
 
                           {/* Last Price in English Numeral Font */}
                           <div className="col-span-4 text-left">
-                            <div
-                              className="text-xs font-black text-[#F0F0F1] font-mono tabular-nums"
-                              dir="ltr"
-                            >
-                              {item.unit === "دلار"
-                                ? `$${formatPriceNumber(priceNum)}`
-                                : formatPriceNumber(priceNum)}
-                            </div>
-                            <div className="text-[10px] text-[#A0A3AD] truncate">
-                              {item.unit}
-                            </div>
+                            {item.price !== null && !isNaN(priceNum) && priceNum > 0 ? (
+                              <>
+                                <div
+                                  className="text-xs font-black text-[#F0F0F1] font-mono tabular-nums"
+                                  dir="ltr"
+                                >
+                                  {isUsd
+                                    ? `$${formatPriceNumber(priceNum, decimals)}`
+                                    : formatPriceNumber(Math.round(priceNum))}
+                                </div>
+                                <div className="text-[10px] text-[#A0A3AD] truncate">
+                                  {item.unit}
+                                </div>
+                              </>
+                            ) : (
+                              <div className="text-[11px] text-[#707581] font-medium">
+                                در انتظار نرخ...
+                              </div>
+                            )}
                           </div>
 
                           {/* 24h Change Pill */}
                           <div className="col-span-3 flex justify-end">
-                            <div
-                              className={cn(
-                                "px-2 py-0.5 rounded-[7px] text-[10px] font-mono font-bold flex items-center gap-1 tabular-nums shrink-0",
-                                isPos
-                                  ? "bg-[#76A98C]/15 text-[#76A98C] border border-[#76A98C]/25"
-                                  : "bg-[#C77A82]/15 text-[#C77A82] border border-[#C77A82]/25",
-                              )}
-                              dir="ltr"
-                            >
-                              {isPos ? (
-                                <TrendingUp className="w-2.5 h-2.5 stroke-[2.5]" />
-                              ) : (
-                                <TrendingDown className="w-2.5 h-2.5 stroke-[2.5]" />
-                              )}
-                              <span>
-                                {isPos ? "+" : ""}
-                                {item.change_percent !== null &&
-                                item.change_percent !== undefined
-                                  ? item.change_percent.toFixed(2)
-                                  : "0.00"}
-                                %
-                              </span>
-                            </div>
+                            {item.price !== null && item.change_percent !== null ? (
+                              <div
+                                className={cn(
+                                  "px-2 py-0.5 rounded-[7px] text-[10px] font-mono font-bold flex items-center gap-1 tabular-nums shrink-0",
+                                  isPos
+                                    ? "bg-[#76A98C]/15 text-[#76A98C] border border-[#76A98C]/25"
+                                    : "bg-[#C77A82]/15 text-[#C77A82] border border-[#C77A82]/25",
+                                )}
+                                dir="ltr"
+                              >
+                                {isPos ? (
+                                  <TrendingUp className="w-2.5 h-2.5 stroke-[2.5]" />
+                                ) : (
+                                  <TrendingDown className="w-2.5 h-2.5 stroke-[2.5]" />
+                                )}
+                                <span>
+                                  {isPos ? "+" : ""}
+                                  {chgPercent.toFixed(2)}%
+                                </span>
+                              </div>
+                            ) : (
+                              <div className="px-2 py-0.5 text-[10px] font-mono text-[#707581]">
+                                —
+                              </div>
+                            )}
                           </div>
                         </Link>
                       );
@@ -992,8 +1101,25 @@ export function CategorizedQuotesGrid({
               </div>
             ) : (
               singleCategoryCard.items.map((item) => {
-                const isPos = (item.change_percent || 0) >= 0;
-                const priceNum = Number(item.price || 0);
+                const chgPercent =
+                  item.change_percent !== null &&
+                  item.change_percent !== undefined
+                    ? Number(item.change_percent)
+                    : 0;
+                const isPos = chgPercent >= 0;
+                const priceNum =
+                  typeof item.price === "string"
+                    ? Number(item.price.replace(/,/g, "").trim())
+                    : Number(item.price || 0);
+                const isUsd =
+                  item.unit === "دلار" ||
+                  item.unit === "USD" ||
+                  item.unit === "$";
+                const decimals = isUsd
+                  ? priceNum < 100 && priceNum % 1 !== 0
+                    ? 2
+                    : 0
+                  : 0;
 
                 return (
                   <Link
@@ -1021,44 +1147,54 @@ export function CategorizedQuotesGrid({
 
                     {/* Price in English Typography */}
                     <div className="col-span-4 md:col-span-3 text-left">
-                      <div
-                        className="text-xs md:text-sm font-black text-[#F0F0F1] font-mono tabular-nums"
-                        dir="ltr"
-                      >
-                        {item.unit === "دلار"
-                          ? `$${formatPriceNumber(priceNum)}`
-                          : formatPriceNumber(priceNum)}
-                      </div>
-                      <div className="text-[10px] text-[#A0A3AD] truncate">
-                        {item.unit}
-                      </div>
+                      {item.price !== null && !isNaN(priceNum) && priceNum > 0 ? (
+                        <>
+                          <div
+                            className="text-xs md:text-sm font-black text-[#F0F0F1] font-mono tabular-nums"
+                            dir="ltr"
+                          >
+                            {isUsd
+                              ? `$${formatPriceNumber(priceNum, decimals)}`
+                              : formatPriceNumber(Math.round(priceNum))}
+                          </div>
+                          <div className="text-[10px] text-[#A0A3AD] truncate">
+                            {item.unit}
+                          </div>
+                        </>
+                      ) : (
+                        <div className="text-xs text-[#707581] font-medium">
+                          در انتظار نرخ...
+                        </div>
+                      )}
                     </div>
 
                     {/* 24h Change Pill */}
                     <div className="col-span-3 md:col-span-3 flex justify-end">
-                      <div
-                        className={cn(
-                          "px-2.5 py-1 rounded-[8px] text-[11px] font-mono font-bold flex items-center gap-1.5 tabular-nums shrink-0",
-                          isPos
-                            ? "bg-[#76A98C]/15 text-[#76A98C] border border-[#76A98C]/25"
-                            : "bg-[#C77A82]/15 text-[#C77A82] border border-[#C77A82]/25",
-                        )}
-                        dir="ltr"
-                      >
-                        {isPos ? (
-                          <TrendingUp className="w-3 h-3 stroke-[2.5]" />
-                        ) : (
-                          <TrendingDown className="w-3 h-3 stroke-[2.5]" />
-                        )}
-                        <span>
-                          {isPos ? "+" : ""}
-                          {item.change_percent !== null &&
-                          item.change_percent !== undefined
-                            ? item.change_percent.toFixed(2)
-                            : "0.00"}
-                          %
-                        </span>
-                      </div>
+                      {item.price !== null && item.change_percent !== null ? (
+                        <div
+                          className={cn(
+                            "px-2.5 py-1 rounded-[8px] text-[11px] font-mono font-bold flex items-center gap-1.5 tabular-nums shrink-0",
+                            isPos
+                              ? "bg-[#76A98C]/15 text-[#76A98C] border border-[#76A98C]/25"
+                              : "bg-[#C77A82]/15 text-[#C77A82] border border-[#C77A82]/25",
+                          )}
+                          dir="ltr"
+                        >
+                          {isPos ? (
+                            <TrendingUp className="w-3 h-3 stroke-[2.5]" />
+                          ) : (
+                            <TrendingDown className="w-3 h-3 stroke-[2.5]" />
+                          )}
+                          <span>
+                            {isPos ? "+" : ""}
+                            {chgPercent.toFixed(2)}%
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="px-2.5 py-1 text-xs font-mono text-[#707581]">
+                          —
+                        </div>
+                      )}
                     </div>
 
                     {/* Sparkline & Detail Arrow */}
