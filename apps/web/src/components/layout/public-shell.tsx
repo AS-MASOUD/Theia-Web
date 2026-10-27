@@ -389,20 +389,13 @@ export function PublicFooter() {
             تمامی حقوق محفوظ است.
           </p>
           <div className="flex flex-wrap items-center gap-4 text-[11px]">
-            <a
-              href={`${dashboardUrl}?view=mobile`}
-              className="px-2.5 py-1 rounded-[8px] bg-[#141519] border border-white/[0.08] hover:border-[#F0AE55]/40 text-[#F0AE55] font-semibold transition-all flex items-center gap-1.5"
-              title="تغییر به نسخه موبایل اپلیکیشن"
-            >
-              <span>مشاهده نسخه موبایل (PWA)</span>
-            </a>
             <span className="text-white/10">•</span>
             <span className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#F0AE55]" />
               معماری امن و داده‌های رمزنگاری شده
             </span>
             <span className="text-white/10">•</span>
-            <span>طراحی بر مبنای اصول Minimal Dark & Ambient Illumination</span>
+            <span>طراحی بهینه رابطه کاربری</span>
           </div>
         </div>
       </div>
