@@ -102,8 +102,7 @@ export default function MarketsHubPage() {
     allQuotes.find((q) => q.symbol === "IR_GOLD_18K")?.price || 4385000;
   const emamiCoin =
     allQuotes.find((q) => q.symbol === "EMAMI_COIN")?.price || 51200000;
-  const btcPriceUsd =
-    allQuotes.find((q) => q.symbol === "BTC")?.price || 68450;
+  const btcPriceUsd = allQuotes.find((q) => q.symbol === "BTC")?.price || 68450;
 
   const converterOutputs = useMemo(() => {
     let baseToman = converterAmount;
@@ -120,17 +119,14 @@ export default function MarketsHubPage() {
       emamiCoins: (baseToman / Number(emamiCoin)).toFixed(2),
       btc: (baseToman / (Number(btcPriceUsd) * usdRate)).toFixed(6),
     };
-  }, [converterAmount, converterFrom, usdRate, gold18k, emamiCoin, btcPriceUsd]);
-
-  const lastUpdatedDisplay = useMemo(() => {
-    if (!marketData?.last_sync_time) return "لحظاتی پیش";
-    try {
-      const d = new Date(marketData.last_sync_time);
-      return d.toLocaleTimeString("fa-IR", { hour: "2-digit", minute: "2-digit" });
-    } catch {
-      return "لحظاتی پیش";
-    }
-  }, [marketData]);
+  }, [
+    converterAmount,
+    converterFrom,
+    usdRate,
+    gold18k,
+    emamiCoin,
+    btcPriceUsd,
+  ]);
 
   return (
     <div className="min-h-screen py-10 md:py-16">
@@ -146,34 +142,18 @@ export default function MarketsHubPage() {
               دیده‌بان جامع بازارهای مالی
             </h1>
             <p className="text-xs md:text-sm text-[#A0A3AD] leading-relaxed">
-              نرخ‌های رسمی و لحظه‌ای طلای ۱۸ عیار، انواع مسکوکات، ارزهای آزاد و مبادله‌ای، رمزارزها و فلزات اساسی، متصل به فید پایدار شبکه تئا.
+              نرخ‌های رسمی و لحظه‌ای طلای ۱۸ عیار، انواع مسکوکات، ارزهای آزاد و
+              مبادله‌ای، رمزارزها و فلزات اساسی، متصل به فید پایدار شبکه تئا.
             </p>
-          </div>
-
-          {/* Sync Status Badge */}
-          <div className="flex items-center gap-3">
-            <div className="flex flex-col text-left text-xs text-[#707581]">
-              <span className="text-[11px]">آخرین همگام‌سازی داده:</span>
-              <span className="font-semibold text-[#E8E8E8]">{lastUpdatedDisplay}</span>
-            </div>
-            <button
-              type="button"
-              onClick={() => refetch()}
-              disabled={isRefetching}
-              className="p-2.5 rounded-[12px] bg-[#151619] hover:bg-[#1B1D21] border border-white/[0.08] text-[#F0AE55] transition-all cursor-pointer active:scale-95 disabled:opacity-50"
-              title="به‌روزرسانی داده‌ها"
-            >
-              <RefreshCw
-                className={cn("w-4 h-4", isRefetching && "animate-spin")}
-              />
-            </button>
           </div>
         </div>
 
         {/* Highlight Ticker Strip */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <div className="rounded-[16px] bg-[#141518] border border-white/[0.07] p-4 flex flex-col justify-between">
-            <span className="text-[11px] text-[#A0A3AD]">طلای ۱۸ عیار (هر گرم)</span>
+            <span className="text-[11px] text-[#A0A3AD]">
+              طلای ۱۸ عیار (هر گرم)
+            </span>
             <div className="flex items-baseline justify-between mt-2">
               <span className="text-base font-extrabold text-[#F0F0F1] font-mono">
                 {Number(gold18k).toLocaleString("en-US")}
@@ -191,7 +171,9 @@ export default function MarketsHubPage() {
             </div>
           </div>
           <div className="rounded-[16px] bg-[#141518] border border-white/[0.07] p-4 flex flex-col justify-between">
-            <span className="text-[11px] text-[#A0A3AD]">دلار آمریکا (آزاد)</span>
+            <span className="text-[11px] text-[#A0A3AD]">
+              دلار آمریکا (آزاد)
+            </span>
             <div className="flex items-baseline justify-between mt-2">
               <span className="text-base font-extrabold text-[#F0F0F1] font-mono">
                 {Number(usdRate).toLocaleString("en-US")}
@@ -205,7 +187,9 @@ export default function MarketsHubPage() {
               <span className="text-base font-extrabold text-[#F0F0F1] font-mono">
                 ${Number(btcPriceUsd).toLocaleString("en-US")}
               </span>
-              <span className="text-[11px] text-[#76A98C] font-semibold">USD</span>
+              <span className="text-[11px] text-[#76A98C] font-semibold">
+                USD
+              </span>
             </div>
           </div>
         </div>
@@ -222,7 +206,7 @@ export default function MarketsHubPage() {
                   "px-3.5 py-1.5 rounded-[11px] text-xs font-medium transition-all cursor-pointer",
                   selectedCategory === cat.id
                     ? "bg-[#F0AE55] text-[#0D0E10] font-bold shadow-[0_0_14px_rgba(240,174,85,0.2)]"
-                    : "bg-[#151619] hover:bg-[#1B1D21] text-[#A0A3AD] hover:text-[#F0F0F1] border border-white/[0.05]"
+                    : "bg-[#151619] hover:bg-[#1B1D21] text-[#A0A3AD] hover:text-[#F0F0F1] border border-white/[0.05]",
                 )}
               >
                 {cat.label}
@@ -267,7 +251,9 @@ export default function MarketsHubPage() {
                       {item.name}
                     </h3>
                     {item.name_en && (
-                      <p className="text-[10px] text-[#707581]">{item.name_en}</p>
+                      <p className="text-[10px] text-[#707581]">
+                        {item.name_en}
+                      </p>
                     )}
                   </div>
 
@@ -277,7 +263,7 @@ export default function MarketsHubPage() {
                       "px-2.5 py-1 rounded-[8px] text-[11px] font-bold flex items-center gap-1",
                       isPos
                         ? "bg-[#76A98C]/15 text-[#76A98C] border border-[#76A98C]/25"
-                        : "bg-[#C77A82]/15 text-[#C77A82] border border-[#C77A82]/25"
+                        : "bg-[#C77A82]/15 text-[#C77A82] border border-[#C77A82]/25",
                     )}
                   >
                     {isPos ? (
@@ -287,7 +273,8 @@ export default function MarketsHubPage() {
                     )}
                     <span dir="ltr">
                       {isPos ? "+" : ""}
-                      {item.change_percent !== null && item.change_percent !== undefined
+                      {item.change_percent !== null &&
+                      item.change_percent !== undefined
                         ? item.change_percent.toFixed(2)
                         : "0.00"}
                       %
@@ -330,115 +317,6 @@ export default function MarketsHubPage() {
         {/* Daily Signals & Chart Analysis Section from Traders */}
         <ChartSignalsSection />
 
-        {/* Live Interactive Currency & Gold Calculator */}
-        <div className="rounded-[24px] bg-[#141519] border border-white/[0.08] p-6 sm:p-8 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.06] pb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-[14px] bg-[rgba(240,174,85,0.12)] border border-[#F0AE55]/30 flex items-center justify-center text-[#F0AE55]">
-                <Calculator className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-[#F0F0F1]">
-                  ماشین‌حساب هوشمند تبدیل طلا، ارز و دارایی‌ها
-                </h3>
-                <p className="text-xs text-[#A0A3AD]">
-                  محاسبه معادل ارزش دارایی شما بر اساس آخرین قیمت‌های اعلام‌شده در سامانه
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 text-xs text-[#F0AE55]">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>محاسبه بلادرنگ و ریاضی قطعی</span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-            {/* Input Side */}
-            <div className="lg:col-span-5 space-y-4">
-              <div>
-                <label className="block text-xs font-medium text-[#A0A3AD] mb-1.5">
-                  مقدار ورودی:
-                </label>
-                <input
-                  type="number"
-                  value={converterAmount}
-                  onChange={(e) => setConverterAmount(Number(e.target.value) || 0)}
-                  className="w-full bg-[#1B1D21] border border-white/[0.1] focus:border-[#F0AE55] rounded-[13px] px-4 py-3 text-sm font-bold text-[#F0F0F1] outline-none transition-colors"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-[#A0A3AD] mb-1.5">
-                  واحد مبدأ:
-                </label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                  {[
-                    { id: "TOMAN", label: "تومان" },
-                    { id: "USD", label: "دلار آمریکا" },
-                    { id: "GOLD_GRAM", label: "گرم طلای ۱۸" },
-                    { id: "COIN", label: "سکه امامی" },
-                  ].map((unit) => (
-                    <button
-                      key={unit.id}
-                      type="button"
-                      onClick={() => setConverterFrom(unit.id)}
-                      className={cn(
-                        "py-2 rounded-[11px] text-xs font-semibold border transition-all cursor-pointer",
-                        converterFrom === unit.id
-                          ? "bg-[#F0AE55] text-[#0D0E10] border-[#F0AE55] shadow-[0_0_12px_rgba(240,174,85,0.25)]"
-                          : "bg-[#18191E] text-[#A0A3AD] border-white/[0.06] hover:bg-[#202228]"
-                      )}
-                    >
-                      {unit.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Equals Icon */}
-            <div className="lg:col-span-1 flex justify-center text-[#707581]">
-              <div className="w-10 h-10 rounded-full bg-[#1B1D21] border border-white/[0.06] flex items-center justify-center text-[#F0AE55]">
-                <ArrowUpDown className="w-4 h-4 rotate-90 lg:rotate-0" />
-              </div>
-            </div>
-
-            {/* Results Output Side */}
-            <div className="lg:col-span-6 grid grid-cols-2 gap-3">
-              <div className="rounded-[16px] bg-[#18191E] border border-white/[0.06] p-4">
-                <span className="text-[11px] text-[#A0A3AD]">معادل ریالی (تومان)</span>
-                <p className="text-base font-extrabold text-[#F0F0F1] mt-1 font-mono">
-                  {converterOutputs.toman.toLocaleString("en-US")}
-                </p>
-              </div>
-
-              <div className="rounded-[16px] bg-[#18191E] border border-white/[0.06] p-4">
-                <span className="text-[11px] text-[#A0A3AD]">معادل دلار آمریکا (USD)</span>
-                <p className="text-base font-extrabold text-[#76A98C] mt-1 font-mono">
-                  ${Number(converterOutputs.usd).toLocaleString("en-US")}
-                </p>
-              </div>
-
-              <div className="rounded-[16px] bg-[#18191E] border border-white/[0.06] p-4">
-                <span className="text-[11px] text-[#A0A3AD]">معادل گرم طلای ۱۸</span>
-                <p className="text-base font-extrabold text-[#F0AE55] mt-1 font-mono">
-                  {Number(converterOutputs.goldGrams).toLocaleString("en-US")}{" "}
-                  <span className="text-xs font-normal">گرم</span>
-                </p>
-              </div>
-
-              <div className="rounded-[16px] bg-[#18191E] border border-white/[0.06] p-4">
-                <span className="text-[11px] text-[#A0A3AD]">معادل سکه تمام امامی</span>
-                <p className="text-base font-extrabold text-[#F0F0F1] mt-1 font-mono">
-                  {Number(converterOutputs.emamiCoins).toLocaleString("en-US")}{" "}
-                  <span className="text-xs font-normal">عدد</span>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Integration Call to action */}
         <div className="rounded-[22px] bg-gradient-to-r from-[#17181D] via-[#1B1D23] to-[#17181D] border border-white/[0.08] p-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-2 text-center md:text-right">
@@ -446,7 +324,9 @@ export default function MarketsHubPage() {
               می‌خواهید دارایی‌های واقعی خود را با این قیمت‌ها بسنجید؟
             </h3>
             <p className="text-xs text-[#A0A3AD]">
-              با ثبت دارایی‌های خود در پلتفرم Personal FC، ارزش خالص، سود و زیان تحقق‌نیافته و تخصیص بهینه پورتفولیوی شما به صورت زنده محاسبه می‌شود.
+              با ثبت دارایی‌های خود در پلتفرم Personal FC، ارزش خالص، سود و زیان
+              تحقق‌نیافته و تخصیص بهینه پورتفولیوی شما به صورت زنده محاسبه
+              می‌شود.
             </p>
           </div>
 
