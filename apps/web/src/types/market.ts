@@ -8,6 +8,7 @@ export interface MarketQuote {
   price: number | string | null;
   unit: string;
   change_percent?: number | null;
+  change_value?: number | string | null;
   price_toman?: number | string | null;
   updated_at?: string | null;
   status: MarketQuoteStatus;
@@ -20,6 +21,7 @@ export interface MarketRatesResponse {
   commodities: MarketQuote[];
   currencies: MarketQuote[];
   cryptocurrency: MarketQuote[];
+  stocks?: MarketQuote[];
   usd_toman_rate?: number | string | null;
   last_sync_time?: string | null;
   sync_source: string;

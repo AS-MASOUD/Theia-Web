@@ -3,69 +3,19 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
-import {
-  TrendingUp,
-  TrendingDown,
-  RefreshCw,
-  Search,
-  Coins,
-  DollarSign,
-  ArrowUpDown,
-  Clock,
-  Sparkles,
-  Layers,
-  ArrowLeft,
-  Sliders,
-  Calculator,
-  ChevronLeft,
-} from "lucide-react";
+import { Coins } from "lucide-react";
 import { webApi } from "@/lib/api";
 import { getInitialMarketCatalog } from "@/data/market-instruments";
 import { MarketQuote, MarketRatesResponse } from "@/types/market";
-import { cn } from "@/lib/utils";
 import { ChartSignalsSection } from "@/components/market/chart-signals-section";
-
-const CATEGORIES = [
-  { id: "all", label: "همه ابزارها" },
-  { id: "gold_coin", label: "طلا و مسکوکات" },
-  { id: "currency", label: "ارزهای شاخص" },
-  { id: "crypto", label: "رمزارزها" },
-  { id: "commodity", label: "فلزات و کالاها" },
-];
-
-function MiniSparkline({ isPositive }: { isPositive: boolean }) {
-  const points = isPositive
-    ? "0,22 15,18 30,20 45,12 60,15 75,8 90,10 105,4 120,2"
-    : "0,4 15,6 30,12 45,10 60,18 75,15 90,20 105,18 120,24";
-
-  return (
-    <svg className="w-20 h-6 overflow-visible" viewBox="0 0 120 26">
-      <polyline
-        fill="none"
-        stroke={isPositive ? "#76A98C" : "#C77A82"}
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        points={points}
-      />
-    </svg>
-  );
-}
+import { HighlightTickerStrip } from "@/components/market/highlight-ticker-strip";
+import { CategorizedQuotesGrid } from "@/components/market/categorized-quotes-grid";
 
 export default function MarketsHubPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Converter state
-  const [converterAmount, setConverterAmount] = useState<number>(10000000);
-  const [converterFrom, setConverterFrom] = useState<string>("TOMAN");
-
-  const {
-    data: marketData,
-    isLoading,
-    isRefetching,
-    refetch,
-  } = useQuery<MarketRatesResponse>({
+  const { data: marketData } = useQuery<MarketRatesResponse>({
     queryKey: ["public-market-rates"],
     queryFn: () => webApi.getMarketRates(),
     initialData: getInitialMarketCatalog(),
@@ -79,54 +29,11 @@ export default function MarketsHubPage() {
       ...(marketData.currencies || []),
       ...(marketData.cryptocurrency || []),
       ...(marketData.commodities || []),
+      ...(marketData.stocks || []),
     ];
   }, [marketData]);
 
-  const filteredQuotes = useMemo(() => {
-    return allQuotes.filter((item) => {
-      const matchesCat =
-        selectedCategory === "all" || item.category === selectedCategory;
-      const matchesQuery =
-        !searchQuery.trim() ||
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (item.name_en &&
-          item.name_en.toLowerCase().includes(searchQuery.toLowerCase()));
-      return matchesCat && matchesQuery;
-    });
-  }, [allQuotes, selectedCategory, searchQuery]);
-
-  // Converter Calculations
   const usdRate = Number(marketData?.usd_toman_rate || 94850);
-  const gold18k =
-    allQuotes.find((q) => q.symbol === "IR_GOLD_18K")?.price || 4385000;
-  const emamiCoin =
-    allQuotes.find((q) => q.symbol === "EMAMI_COIN")?.price || 51200000;
-  const btcPriceUsd = allQuotes.find((q) => q.symbol === "BTC")?.price || 68450;
-
-  const converterOutputs = useMemo(() => {
-    let baseToman = converterAmount;
-    if (converterFrom === "USD") baseToman = converterAmount * usdRate;
-    else if (converterFrom === "GOLD_GRAM")
-      baseToman = converterAmount * Number(gold18k);
-    else if (converterFrom === "COIN")
-      baseToman = converterAmount * Number(emamiCoin);
-
-    return {
-      toman: Math.round(baseToman),
-      usd: (baseToman / usdRate).toFixed(2),
-      goldGrams: (baseToman / Number(gold18k)).toFixed(3),
-      emamiCoins: (baseToman / Number(emamiCoin)).toFixed(2),
-      btc: (baseToman / (Number(btcPriceUsd) * usdRate)).toFixed(6),
-    };
-  }, [
-    converterAmount,
-    converterFrom,
-    usdRate,
-    gold18k,
-    emamiCoin,
-    btcPriceUsd,
-  ]);
 
   return (
     <div className="min-h-screen py-10 md:py-16">
@@ -143,176 +50,23 @@ export default function MarketsHubPage() {
             </h1>
             <p className="text-xs md:text-sm text-[#A0A3AD] leading-relaxed">
               نرخ‌های رسمی و لحظه‌ای طلای ۱۸ عیار، انواع مسکوکات، ارزهای آزاد و
-              مبادله‌ای، رمزارزها و فلزات اساسی، متصل به فید پایدار شبکه تئا.
+              مبادله‌ای، شاخص‌های بورس، رمزارزها و فلزات اساسی، متصل به فید پایدار شبکه تئا.
             </p>
           </div>
         </div>
 
         {/* Highlight Ticker Strip */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div className="rounded-[16px] bg-[#141518] border border-white/[0.07] p-4 flex flex-col justify-between">
-            <span className="text-[11px] text-[#A0A3AD]">
-              طلای ۱۸ عیار (هر گرم)
-            </span>
-            <div className="flex items-baseline justify-between mt-2">
-              <span className="text-base font-extrabold text-[#F0F0F1] font-mono">
-                {Number(gold18k).toLocaleString("en-US")}
-              </span>
-              <span className="text-[11px] text-[#F0AE55]">تومان</span>
-            </div>
-          </div>
-          <div className="rounded-[16px] bg-[#141518] border border-white/[0.07] p-4 flex flex-col justify-between">
-            <span className="text-[11px] text-[#A0A3AD]">سکه تمام امامی</span>
-            <div className="flex items-baseline justify-between mt-2">
-              <span className="text-base font-extrabold text-[#F0F0F1] font-mono">
-                {Number(emamiCoin).toLocaleString("en-US")}
-              </span>
-              <span className="text-[11px] text-[#F0AE55]">تومان</span>
-            </div>
-          </div>
-          <div className="rounded-[16px] bg-[#141518] border border-white/[0.07] p-4 flex flex-col justify-between">
-            <span className="text-[11px] text-[#A0A3AD]">
-              دلار آمریکا (آزاد)
-            </span>
-            <div className="flex items-baseline justify-between mt-2">
-              <span className="text-base font-extrabold text-[#F0F0F1] font-mono">
-                {Number(usdRate).toLocaleString("en-US")}
-              </span>
-              <span className="text-[11px] text-[#F0AE55]">تومان</span>
-            </div>
-          </div>
-          <div className="rounded-[16px] bg-[#141518] border border-white/[0.07] p-4 flex flex-col justify-between">
-            <span className="text-[11px] text-[#A0A3AD]">بیت‌کوین (BTC)</span>
-            <div className="flex items-baseline justify-between mt-2">
-              <span className="text-base font-extrabold text-[#F0F0F1] font-mono">
-                ${Number(btcPriceUsd).toLocaleString("en-US")}
-              </span>
-              <span className="text-[11px] text-[#76A98C] font-semibold">
-                USD
-              </span>
-            </div>
-          </div>
-        </div>
+        <HighlightTickerStrip quotes={allQuotes} usdRate={usdRate} />
 
-        {/* Filters and Search Bar */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-4 border-t border-white/[0.06]">
-          {/* Category Tabs */}
-          <div className="flex flex-wrap items-center gap-1.5 w-full md:w-auto">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className={cn(
-                  "px-3.5 py-1.5 rounded-[11px] text-xs font-medium transition-all cursor-pointer",
-                  selectedCategory === cat.id
-                    ? "bg-[#F0AE55] text-[#0D0E10] font-bold shadow-[0_0_14px_rgba(240,174,85,0.2)]"
-                    : "bg-[#151619] hover:bg-[#1B1D21] text-[#A0A3AD] hover:text-[#F0F0F1] border border-white/[0.05]",
-                )}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Search Box */}
-          <div className="relative w-full md:w-72">
-            <Search className="w-4 h-4 text-[#707581] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="جستجو نماد یا نام ابزار..."
-              className="w-full bg-[#151619] border border-white/[0.08] focus:border-[#F0AE55] rounded-[12px] pr-10 pl-4 py-2 text-xs text-[#F0F0F1] placeholder-[#707581] outline-none transition-colors"
-            />
-          </div>
-        </div>
-
-        {/* Quotes Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filteredQuotes.map((item) => {
-            const isPos = (item.change_percent || 0) >= 0;
-            const priceNum = Number(item.price);
-
-            return (
-              <Link
-                key={item.symbol}
-                href={`/markets/${item.symbol}`}
-                className="group rounded-[20px] bg-[#141519] border border-white/[0.07] hover:border-[#F0AE55]/40 hover:bg-[#181A20] p-5 flex flex-col justify-between space-y-4 transition-all duration-200 shadow-sm hover:shadow-xl hover:-translate-y-0.5 relative overflow-hidden"
-              >
-                {/* Local ambient glow on hover */}
-                <div className="absolute -top-12 -left-12 w-32 h-32 bg-[radial-gradient(circle_at_center,rgba(240,174,85,0.08)_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-
-                <div className="flex items-start justify-between">
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-mono tracking-wider text-[#A0A3AD] uppercase">
-                      {item.symbol}
-                    </span>
-                    <h3 className="text-sm font-bold text-[#F0F0F1] group-hover:text-[#F0AE55] transition-colors">
-                      {item.name}
-                    </h3>
-                    {item.name_en && (
-                      <p className="text-[10px] text-[#707581]">
-                        {item.name_en}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Change badge */}
-                  <div
-                    className={cn(
-                      "px-2.5 py-1 rounded-[8px] text-[11px] font-bold flex items-center gap-1",
-                      isPos
-                        ? "bg-[#76A98C]/15 text-[#76A98C] border border-[#76A98C]/25"
-                        : "bg-[#C77A82]/15 text-[#C77A82] border border-[#C77A82]/25",
-                    )}
-                  >
-                    {isPos ? (
-                      <TrendingUp className="w-3 h-3 stroke-[2.5]" />
-                    ) : (
-                      <TrendingDown className="w-3 h-3 stroke-[2.5]" />
-                    )}
-                    <span dir="ltr">
-                      {isPos ? "+" : ""}
-                      {item.change_percent !== null &&
-                      item.change_percent !== undefined
-                        ? item.change_percent.toFixed(2)
-                        : "0.00"}
-                      %
-                    </span>
-                  </div>
-                </div>
-
-                {/* Price Readout & Sparkline */}
-                <div className="flex items-end justify-between pt-3 border-t border-white/[0.05]">
-                  <div className="space-y-0.5">
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="text-xl font-black text-[#F0F0F1] font-mono">
-                        {item.unit === "دلار"
-                          ? `$${priceNum.toLocaleString("en-US")}`
-                          : priceNum.toLocaleString("en-US")}
-                      </span>
-                      <span className="text-[11px] text-[#A0A3AD]">
-                        {item.unit}
-                      </span>
-                    </div>
-
-                    {item.price_toman && item.unit === "دلار" && (
-                      <p className="text-[10px] text-[#707581]">
-                        معادل تقریبی:{" "}
-                        <span className="font-mono">
-                          {Number(item.price_toman).toLocaleString("en-US")}
-                        </span>{" "}
-                        تومان
-                      </p>
-                    )}
-                  </div>
-
-                  <MiniSparkline isPositive={isPos} />
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+        {/* Quotes Grid: Three Bigger-Height Cards in Three Columns with Internal Table Grids & Accordion Option */}
+        <CategorizedQuotesGrid
+          quotes={allQuotes}
+          selectedCategory={selectedCategory}
+          onSelectCategory={setSelectedCategory}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          usdRate={usdRate}
+        />
 
         {/* Daily Signals & Chart Analysis Section from Traders */}
         <ChartSignalsSection />
