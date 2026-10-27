@@ -62,7 +62,9 @@ function Sparkline({ isPositive }: { isPositive: boolean }) {
 }
 
 export default function PublicHomePage() {
-  const dashboardUrl = (process.env.NEXT_PUBLIC_DASHBOARD_URL || "http://localhost:3000").replace(/\/+$/, "");
+  const dashboardUrl = (
+    process.env.NEXT_PUBLIC_DASHBOARD_URL || "http://localhost:3000"
+  ).replace(/\/+$/, "");
 
   // Interactive Demo Tab State
   const [demoTab, setDemoTab] = useState<
@@ -115,14 +117,14 @@ export default function PublicHomePage() {
       {/* ======================================================== */}
       {/* 1. HERO SECTION (Part 6)                                 */}
       {/* ======================================================== */}
-      <section className="relative pt-12 md:pt-24 max-w-7xl mx-auto px-4 sm:px-6">
+      <section className="relative pt-12 md:pt-10 max-w-7xl mx-auto px-4 sm:px-6">
         {/* Soft Ambient Radial Illumination behind hero */}
         <div className="absolute top-1/4 right-1/4 w-[450px] h-[450px] bg-[radial-gradient(circle_at_center,rgba(240,174,85,0.09)_0%,transparent_70%)] pointer-events-none -z-10" />
         <div className="absolute top-1/3 left-10 w-[380px] h-[380px] bg-[radial-gradient(circle_at_center,rgba(118,169,140,0.06)_0%,transparent_70%)] pointer-events-none -z-10" />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Right Column: Headline, Copy & CTAs */}
-          <div className="lg:col-span-6 space-y-6 text-center lg:text-right">
+          <div className="lg:col-span-6 -translate-y-2.5 space-y-6 text-center lg:text-right">
             {/* Pill Badge */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#151619] border border-white/[0.08] shadow-[0_0_16px_rgba(240,174,85,0.12)]">
               <span className="w-2 h-2 rounded-full bg-[#F0AE55] animate-pulse" />
@@ -458,7 +460,9 @@ export default function PublicHomePage() {
                 <span className="text-xs text-[#A0A3AD]">
                   نسبت سلامت نقدینگی (Runway)
                 </span>
-                <p className="text-3xl font-black text-[#76A98C] font-mono">7.2 ماه</p>
+                <p className="text-3xl font-black text-[#76A98C] font-mono">
+                  7.2 ماه
+                </p>
                 <p className="text-[11px] text-[#707581]">
                   پوشش کامل هزینه‌های ضروری در حالت اضطرار
                 </p>
@@ -467,7 +471,9 @@ export default function PublicHomePage() {
                 <span className="text-xs text-[#A0A3AD]">
                   نسبت بدهی به درآمد (DTI)
                 </span>
-                <p className="text-3xl font-black text-[#F0AE55] font-mono">24.5%</p>
+                <p className="text-3xl font-black text-[#F0AE55] font-mono">
+                  24.5%
+                </p>
                 <p className="text-[11px] text-[#707581]">
                   در محدوده ایمن و استاندارد بانکی
                 </p>
@@ -476,7 +482,9 @@ export default function PublicHomePage() {
                 <span className="text-xs text-[#A0A3AD]">
                   نرخ تبدیل به دارایی سرمایه‌ای
                 </span>
-                <p className="text-3xl font-black text-[#88A9BC] font-mono">36.7%</p>
+                <p className="text-3xl font-black text-[#88A9BC] font-mono">
+                  36.7%
+                </p>
                 <p className="text-[11px] text-[#707581]">
                   پس‌انداز مؤثر هدایت شده به رشد ثروت
                 </p>
@@ -746,8 +754,10 @@ export default function PublicHomePage() {
               <p>
                 بر مبنای متوسط درآمد خالص ماهانه فعلی شما، افزایش ۱۵ درصدی
                 پس‌انداز معادل{" "}
-                <strong className="text-[#F0AE55] font-mono">7,200,000 تومان</strong> در
-                ماه خواهد بود.
+                <strong className="text-[#F0AE55] font-mono">
+                  7,200,000 تومان
+                </strong>{" "}
+                در ماه خواهد بود.
               </p>
 
               <div className="rounded-[12px] bg-[#0E0F12] p-3 space-y-1.5 text-xs text-[#A0A3AD]">
@@ -767,7 +777,9 @@ export default function PublicHomePage() {
                 </div>
                 <div className="flex justify-between">
                   <span>تسریع تاریخ آزادی کامل از وام‌ها:</span>
-                  <span className="font-bold text-[#F0AE55] font-mono">14 ماه زودتر</span>
+                  <span className="font-bold text-[#F0AE55] font-mono">
+                    14 ماه زودتر
+                  </span>
                 </div>
               </div>
 
