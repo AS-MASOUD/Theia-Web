@@ -289,7 +289,7 @@ export default function AdminSignalsPage() {
                       <td className="p-4 text-center">
                         <div className="flex items-center justify-center gap-1">
                           <Link
-                            href={`/markets/analysis/${sig.id}`}
+                            href={`/analysis/${sig.id}`}
                             target="_blank"
                             className="p-1.5 rounded-lg text-[#A0A3AD] hover:text-white hover:bg-white/5 transition-all"
                             title="مشاهده صفحه کامل تحلیل"

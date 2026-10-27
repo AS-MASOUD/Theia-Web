@@ -164,7 +164,7 @@ export function ChartSignalsSection({ hideHeader = false }: { hideHeader?: boole
 
                   {/* Title linking to full page */}
                   <h3 className="font-extrabold text-sm sm:text-base text-[#F0F0F1] line-clamp-2 leading-snug group-hover:text-[#76A98C] transition-colors">
-                    <Link href={`/markets/analysis/${signal.id}`}>
+                    <Link href={`/analysis/${signal.id}`}>
                       {signal.title}
                     </Link>
                   </h3>
@@ -172,7 +172,7 @@ export function ChartSignalsSection({ hideHeader = false }: { hideHeader?: boole
                   {/* Chart Snapshot Thumbnail */}
                   {signal.chartImageUrl && (
                     <Link
-                      href={`/markets/analysis/${signal.id}`}
+                      href={`/analysis/${signal.id}`}
                       className="block relative rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0E0F12] h-44 group/img"
                     >
                       <img
@@ -213,7 +213,7 @@ export function ChartSignalsSection({ hideHeader = false }: { hideHeader?: boole
                   </div>
 
                   <Link
-                    href={`/markets/analysis/${signal.id}`}
+                    href={`/analysis/${signal.id}`}
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-[#76A98C]/20 text-[#76A98C] text-xs font-bold transition-all"
                   >
                     <span>مطالعه تحلیل کامل</span>
