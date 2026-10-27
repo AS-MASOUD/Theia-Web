@@ -7,22 +7,12 @@ import {
   FileText,
   LineChart,
   MessageSquare,
-  Users,
-  TrendingUp,
-  Plus,
   ArrowLeft,
-  Sparkles,
-  CheckCircle2,
-  Clock,
   Layers,
-  Shield,
 } from "lucide-react";
 import { webApi } from "@/lib/api";
-import { useAdminAuth } from "@/lib/admin-auth-context";
 
 export default function AdminDashboardPage() {
-  const { user, isAdmin, isEditor, isTrader } = useAdminAuth();
-
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ["admin-stats"],
     queryFn: () => webApi.adminGetStats(),
@@ -46,49 +36,6 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="space-y-8">
-      {/* Welcome Banner */}
-      <div className="relative rounded-3xl border border-white/[0.08] bg-gradient-to-r from-[#17181D] via-[#131417] to-[#101114] p-6 sm:p-8 overflow-hidden shadow-2xl">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[radial-gradient(circle_at_top_right,rgba(240,174,85,0.12)_0%,transparent_70%)] pointer-events-none" />
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <span className="text-xs px-3 py-1 rounded-full bg-[#F0AE55]/15 text-[#F0AE55] font-bold border border-[#F0AE55]/30 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5" />
-                مرکز عملیات Theia Control
-              </span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-[#F0F0F1] tracking-tight">
-              درود، {user?.fullName || "کاربر گرامی"}
-            </h1>
-            <p className="text-xs sm:text-sm text-[#A0A3AD] max-w-xl">
-              به پنل یکپارچه مدیریت محتوا، تحلیل چارت و سیگنال‌های روزانه بازارهای مالی تیا خوش آمدید.
-            </p>
-          </div>
-
-          {/* Quick CTAs */}
-          <div className="flex flex-wrap items-center gap-3">
-            {(isTrader || isAdmin) && (
-              <Link
-                href="/admin/signals"
-                className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-[#76A98C] to-[#5B8D71] text-[#0D0E10] font-black text-xs hover:opacity-95 transition-all shadow-[0_0_18px_rgba(118,169,140,0.25)]"
-              >
-                <Plus className="w-4 h-4" />
-                <span>ثبت سیگنال معاملاتی جدید</span>
-              </Link>
-            )}
-            {(isEditor || isAdmin) && (
-              <Link
-                href="/admin/articles/new"
-                className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-[#F0AE55] to-[#E59F45] text-[#0D0E10] font-black text-xs hover:opacity-95 transition-all shadow-[0_0_18px_rgba(240,174,85,0.25)]"
-              >
-                <Plus className="w-4 h-4" />
-                <span>نگارش مقاله / خبر</span>
-              </Link>
-            )}
-          </div>
-        </div>
-      </div>
-
       {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="rounded-2xl bg-[#141518] border border-white/[0.06] p-5 space-y-3">

@@ -113,7 +113,16 @@ export function AdminShell({ children }: AdminShellProps) {
           >
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
-          <span className="font-extrabold text-base text-[#F0AE55] tracking-tight">پنل مدیریت تیا</span>
+          <div className="relative flex items-center justify-center shrink-0">
+            <div className="relative h-7 w-7 rounded-[9px] bg-[#141519]/90 border border-white/[0.08] flex items-center justify-center p-1 shadow-[0_0_10px_rgba(240,174,85,0.18)]">
+              <img
+                src="/Theia-Logo.svg"
+                alt="داشبورد مدیریتی تئا"
+                className="w-full h-full object-contain"
+              />
+            </div>
+          </div>
+          <span className="font-extrabold text-sm text-[#F0F0F1] tracking-tight">داشبورد مدیریتی تئا</span>
         </div>
         <div className="flex items-center gap-2">
           <span className={`text-[10px] px-2.5 py-1 rounded-full border font-semibold ${roleMeta.bg}`}>
@@ -132,11 +141,22 @@ export function AdminShell({ children }: AdminShellProps) {
           {/* Logo / Brand Header */}
           <div className="p-6 border-b border-white/[0.08] flex items-center justify-between">
             <Link href="/admin/dashboard" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#F0AE55] to-[#B87A28] flex items-center justify-center text-[#0D0E10] font-black shadow-[0_0_20px_rgba(240,174,85,0.35)]">
-                T
+              <div className="relative flex items-center justify-center shrink-0">
+                {/* Gentle ambient glow effect behind the logo */}
+                <div className="absolute -inset-2 rounded-full bg-[radial-gradient(circle_at_center,rgba(240,174,85,0.35)_0%,transparent_70%)] blur-md pointer-events-none transition-all duration-300 group-hover:scale-125 group-hover:opacity-100" />
+
+                <div className="relative h-10 w-10 rounded-[13px] bg-[#141519]/90 border border-white/[0.08] flex items-center justify-center shadow-[0_0_16px_rgba(240,174,85,0.18)] group-hover:border-[#F0AE55]/40 transition-all p-1.5">
+                  <img
+                    src="/Theia-Logo.svg"
+                    alt="داشبورد مدیریتی تئا"
+                    className="w-full h-full object-contain filter drop-shadow-[0_0_6px_rgba(240,174,85,0.35)] transition-transform group-hover:scale-105"
+                  />
+                </div>
               </div>
               <div>
-                <h2 className="font-black text-base text-[#F0F0F1] tracking-tight">Theia Control</h2>
+                <h2 className="font-black text-[14px] sm:text-[15px] text-[#F0F0F1] tracking-tight group-hover:text-[#F0AE55] transition-colors whitespace-nowrap">
+                  داشبورد مدیریتی تئا
+                </h2>
                 <p className="text-[10px] text-[#A0A3AD]">سامانه فرماندهی و محتوا</p>
               </div>
             </Link>
