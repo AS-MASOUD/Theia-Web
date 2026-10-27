@@ -7,31 +7,17 @@ import { useQuery } from "@tanstack/react-query";
 import {
   Wallet,
   ArrowLeft,
-  ArrowUpRight,
-  TrendingUp,
-  TrendingDown,
   ShieldCheck,
   Sparkles,
   PieChart,
   Layers,
   LineChart,
-  SlidersHorizontal,
   Bot,
   Coins,
   CheckCircle2,
-  RefreshCw,
-  Flame,
-  Zap,
   Lock,
-  ChevronLeft,
-  Calendar,
-  Clock,
   ArrowDownUp,
-  Sliders,
-  DollarSign,
   Activity,
-  Award,
-  Eye,
   Check,
 } from "lucide-react";
 import { webApi } from "@/lib/api";
@@ -42,26 +28,6 @@ import { cn } from "@/lib/utils";
 import { IphoneMobilePreview } from "@/components/home/iphone-mobile-preview";
 import { HighlightTickerStrip } from "@/components/market/highlight-ticker-strip";
 
-// Mini Sparkline component
-function Sparkline({ isPositive }: { isPositive: boolean }) {
-  const points = isPositive
-    ? "0,20 15,16 30,18 45,10 60,12 75,6 90,8 105,3 120,2"
-    : "0,3 15,5 30,10 45,8 60,16 75,12 90,18 105,15 120,22";
-
-  return (
-    <svg className="w-18 h-5 overflow-visible" viewBox="0 0 120 24">
-      <polyline
-        fill="none"
-        stroke={isPositive ? "#76A98C" : "#C77A82"}
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        points={points}
-      />
-    </svg>
-  );
-}
-
 export default function PublicHomePage() {
   const dashboardUrl = (
     process.env.NEXT_PUBLIC_DASHBOARD_URL || "http://localhost:3000"
@@ -71,9 +37,6 @@ export default function PublicHomePage() {
   const [demoTab, setDemoTab] = useState<
     "portfolio" | "cashflow" | "health" | "trajectory"
   >("portfolio");
-
-  // Interactive Ambient Mode Slider State (Reference styling from Media 2)
-  const [ambientRisk, setAmbientRisk] = useState<number>(65);
 
   // Live Market Rates Query
   const {

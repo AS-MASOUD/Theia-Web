@@ -59,91 +59,43 @@ export interface CategorySector {
   }[];
 }
 
-// Pinned primary category buttons for quick switching
-export const PINNED_CATEGORIES = [
-  { id: "all", label: "اصلی" },
-  { id: "gold_coin", label: "طلا و سکه" },
-  { id: "currency", label: "ارزهای شاخص" },
-  { id: "crypto", label: "رمزارزها" },
-  { id: "stock", label: "بورس و سهام" },
-  { id: "commodity", label: "فلزات و کالاها" },
-];
-
-// Comprehensive 21+ categories grouped into accordion sectors
-export const MARKET_SECTORS: CategorySector[] = [
+// Main market categories for quick switching and simple dropdown
+export const MAIN_MARKET_CATEGORIES = [
+  { id: "all", label: "همه بازارها", icon: Layers, color: "text-[#F0AE55]" },
+  { id: "gold_coin", label: "طلا و سکه", icon: Coins, color: "text-[#F0AE55]" },
   {
-    id: "sec_gold",
-    label: "طلا و سکه",
-    icon: Coins,
-    accentColor: "amber",
-    categories: [
-      { id: "gold_coin", label: "همه طلا و سکه" },
-      { id: "gold_raw", label: "طلای ۱۸، آبشده و مثقال" },
-      { id: "gold_full_coins", label: "مسکوکات بهار آزادی (امامی و قدیم)" },
-      { id: "gold_fractional", label: "قطعات خرد (نیم، ربع، سکه گرمی)" },
-      { id: "gold_global", label: "انس و مظنه جهانی طلا" },
-    ],
-  },
-  {
-    id: "sec_currency",
+    id: "currency",
     label: "ارزهای بین‌المللی و منطقه‌ای",
     icon: DollarSign,
-    accentColor: "emerald",
-    categories: [
-      { id: "currency", label: "همه ارزهای بین‌المللی" },
-      { id: "fx_major", label: "ارزهای اصلی تجاری (دلار، درهم، یورو، یوان)" },
-      {
-        id: "fx_global",
-        label: "ارزهای اروپایی و فرامرزی (پوند، فرانک، دلار کانادا)",
-      },
-      {
-        id: "fx_regional",
-        label: "ارزهای منطقه‌ای و زیارتی (لیر، دینار، ریال سعودی)",
-      },
-    ],
+    color: "text-[#76A98C]",
   },
   {
-    id: "sec_stock",
+    id: "stock",
     label: "بازار بورس و اوراق بهادار",
     icon: BarChart3,
-    accentColor: "cyan",
-    categories: [
-      { id: "stock", label: "همه سهام و شاخص‌ها" },
-      { id: "stock_indices", label: "شاخص‌های کلان (کل، هم‌وزن، فرابورس)" },
-      { id: "stock_metals", label: "غول‌های فلزی و معدنی (فولاد، فملی)" },
-      {
-        id: "stock_holdings",
-        label: "پتروپالایشی و هلدینگ‌ها (شستا، فارس، وبملت)",
-      },
-    ],
+    color: "text-cyan-400",
   },
   {
-    id: "sec_crypto",
+    id: "crypto",
     label: "رمزارزها و دارایی‌های دیجیتال",
     icon: Flame,
-    accentColor: "indigo",
-    categories: [
-      { id: "crypto", label: "همه رمزارزها" },
-      { id: "crypto_l1", label: "رهبران بازار و لایه اول (BTC, ETH, SOL)" },
-      { id: "crypto_stables", label: "استیبل‌کوین‌ها و نقدینگی (USDT, USDC)" },
-      {
-        id: "crypto_altcoins",
-        label: "آلت‌کوین‌ها و اکوسیستم (BNB, TON, XRP)",
-      },
-    ],
+    color: "text-indigo-400",
   },
   {
-    id: "sec_commodity",
+    id: "commodity",
     label: "کالاها، انرژی و فلزات اساسی",
     icon: Gem,
-    accentColor: "rose",
-    categories: [
-      { id: "commodity", label: "همه فلزات و کالاها" },
-      { id: "com_energy", label: "نفت خام و انرژی (برنت، وست تگزاس)" },
-      { id: "com_precious", label: "فلزات گرانبها (انس طلا، نقره جهانی)" },
-      { id: "com_industrial", label: "فلزات اساسی LME (مس کاتد لندن)" },
-    ],
+    color: "text-[#C77A82]",
   },
+];
+
+export const PINNED_CATEGORIES = [
+  { id: "all", label: "همه بازارها" },
+  { id: "gold_coin", label: "طلا و سکه" },
+  { id: "currency", label: "ارزهای بین‌المللی" },
+  { id: "crypto", label: "رمزارزها" },
+  { id: "stock", label: "بورس و سهام" },
+  { id: "commodity", label: "کالا و انرژی" },
 ];
 
 function MiniSparkline({ isPositive }: { isPositive: boolean }) {
@@ -176,7 +128,25 @@ export function CategorizedQuotesGrid({
   onSearchChange,
   usdRate = 94850,
 }: CategorizedQuotesGridProps) {
-  const [isCategoryAccordionOpen, setIsCategoryAccordionOpen] = useState(false);
+  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsCategoryDropdownOpen(false);
+      }
+    }
+    if (isCategoryDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isCategoryDropdownOpen]);
 
   // Helper to resolve effective quote with reliable fallback numbers
   const resolveQuote = (symbol: string): MarketQuote => {
@@ -655,27 +625,75 @@ export function CategorizedQuotesGrid({
             </button>
           ))}
 
-          {/* Accordion Categories Button (Opens expandable drawer with 21+ categories) */}
-          <button
-            type="button"
-            onClick={() => setIsCategoryAccordionOpen((prev) => !prev)}
-            className={cn(
-              "px-3 py-1.5 rounded-[11px] text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 border",
-              isCategoryAccordionOpen
-                ? "bg-[#202228] text-[#F0AE55] border-[#F0AE55]/40 shadow-sm"
-                : "bg-[#151619] hover:bg-[#1B1D21] text-[#A0A3AD] hover:text-[#F0F0F1] border-white/[0.06]",
-            )}
-            title="مرور آکاردئونی تمامی دسته‌بندی‌های بازار"
-          >
-            <SlidersHorizontal className="w-3.5 h-3.5 text-[#F0AE55]" />
-            <span>تمام دسته‌بندی‌ها (۲۱ دسته)</span>
-            <ChevronDown
+          {/* Simple Dropdown Menu */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              type="button"
+              onClick={() => setIsCategoryDropdownOpen((prev) => !prev)}
               className={cn(
-                "w-3.5 h-3.5 transition-transform duration-200",
-                isCategoryAccordionOpen && "rotate-180",
+                "px-3 py-1.5 rounded-[11px] text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 border",
+                isCategoryDropdownOpen
+                  ? "bg-[#202228] text-[#F0AE55] border-[#F0AE55]/40 shadow-sm"
+                  : "bg-[#151619] hover:bg-[#1B1D21] text-[#A0A3AD] hover:text-[#F0F0F1] border-white/[0.06]",
               )}
-            />
-          </button>
+              title="فهرست کشویی دسته‌بندی‌های اصلی بازار"
+            >
+              <SlidersHorizontal className="w-3.5 h-3.5 text-[#F0AE55]" />
+              <span>انتخاب بازار</span>
+              <ChevronDown
+                className={cn(
+                  "w-3.5 h-3.5 transition-transform duration-200",
+                  isCategoryDropdownOpen && "rotate-180 text-[#F0AE55]",
+                )}
+              />
+            </button>
+
+            {/* Simple Floating Dropdown Popover */}
+            {isCategoryDropdownOpen && (
+              <div className="absolute right-0 top-full mt-2 w-64 rounded-[16px] bg-[#141519]/98 backdrop-blur-2xl border border-white/[0.1] shadow-2xl z-50 p-1.5 space-y-1 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="px-3 py-1.5 text-[10px] font-semibold text-[#707581] border-b border-white/[0.06] mb-1">
+                  دسته‌بندی‌های اصلی بازار
+                </div>
+                {MAIN_MARKET_CATEGORIES.map((cat) => {
+                  const IconComp = cat.icon;
+                  const isSelected = selectedCategory === cat.id;
+                  return (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      onClick={() => {
+                        onSelectCategory(cat.id);
+                        setIsCategoryDropdownOpen(false);
+                      }}
+                      className={cn(
+                        "w-full flex items-center justify-between px-3 py-2 rounded-[10px] text-xs font-medium transition-all cursor-pointer text-right",
+                        isSelected
+                          ? "bg-[#F0AE55] text-[#0D0E10] font-bold shadow-sm"
+                          : "text-[#A0A3AD] hover:text-[#F0F0F1] hover:bg-white/[0.05]",
+                      )}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <div
+                          className={cn(
+                            "w-6 h-6 rounded-[7px] flex items-center justify-center",
+                            isSelected
+                              ? "bg-black/15 text-[#0D0E10]"
+                              : "bg-white/[0.05] " + cat.color,
+                          )}
+                        >
+                          <IconComp className="w-3.5 h-3.5" />
+                        </div>
+                        <span>{cat.label}</span>
+                      </div>
+                      {isSelected && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#0D0E10]" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Direct Search Box for Currencies, Symbols or Categories */}
@@ -685,7 +703,7 @@ export function CategorizedQuotesGrid({
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="جستجوی مستقیم نماد، ارز یا دسته..."
+            placeholder="جستجوی مستقیم نماد یا بازار..."
             className="w-full bg-[#151619] border border-white/[0.08] focus:border-[#F0AE55] rounded-[12px] pr-10 pl-4 py-2 text-xs text-[#F0F0F1] placeholder-[#707581] outline-none transition-colors"
           />
           {searchQuery && (
@@ -698,72 +716,6 @@ export function CategorizedQuotesGrid({
           )}
         </div>
       </div>
-
-      {/* Accordion Categories Drawer for 20+ Categories */}
-      {isCategoryAccordionOpen && (
-        <div className="rounded-[22px] bg-[#141519] border border-white/[0.09] p-5 shadow-2xl space-y-4 animate-in fade-in slide-in-from-top-2 duration-200">
-          <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
-            <div className="flex items-center gap-2 text-xs font-bold text-[#F0F0F1]">
-              <Layers className="w-4 h-4 text-[#F0AE55]" />
-              <span>
-                فهرست جامع دسته‌بندی‌های بازار مالی تئا (تفکیک به ۲۱ بازار
-                تخصصی)
-              </span>
-            </div>
-            <button
-              onClick={() => setIsCategoryAccordionOpen(false)}
-              className="text-[11px] text-[#A0A3AD] hover:text-[#F0F0F1] flex items-center gap-1 cursor-pointer px-2 py-1 rounded-[7px] bg-white/[0.03] hover:bg-white/[0.06]"
-            >
-              <span>بستن منو</span>
-              <X className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
-            {MARKET_SECTORS.map((sector) => {
-              const IconComp = sector.icon;
-              return (
-                <div
-                  key={sector.id}
-                  className="rounded-[16px] bg-[#18191E] border border-white/[0.06] p-3.5 space-y-2.5 flex flex-col justify-between"
-                >
-                  <div className="flex items-center justify-between text-xs font-bold text-[#F0F0F1]">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-[7px] bg-white/[0.05] flex items-center justify-center text-[#F0AE55]">
-                        <IconComp className="w-3.5 h-3.5" />
-                      </div>
-                      <span>{sector.label}</span>
-                    </div>
-                    <span className="text-[10px] text-[#707581] font-mono tabular-nums">
-                      {sector.categories.length} دسته
-                    </span>
-                  </div>
-
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {sector.categories.map((subCat) => (
-                      <button
-                        key={subCat.id}
-                        onClick={() => {
-                          onSelectCategory(subCat.id);
-                          setIsCategoryAccordionOpen(false);
-                        }}
-                        className={cn(
-                          "px-2.5 py-1 rounded-[8px] text-[11px] font-medium transition-all cursor-pointer text-right",
-                          selectedCategory === subCat.id
-                            ? "bg-[#F0AE55] text-[#0D0E10] font-bold shadow-sm"
-                            : "bg-[#202228] text-[#A0A3AD] hover:text-[#F0F0F1] hover:bg-[#282A32] border border-white/[0.04]",
-                        )}
-                      >
-                        {subCat.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
 
       {/* Primary Display Area: */}
       {/* CASE A: If "همه بازارها" is selected -> Display the THREE Cards Layout */}
@@ -998,9 +950,9 @@ export function CategorizedQuotesGrid({
                 type="button"
                 onClick={() => onSelectCategory("all")}
                 className="px-3 py-1.5 rounded-[10px] bg-[#202228] hover:bg-[#282A32] text-[#F0AE55] hover:text-[#F3BE76] border border-white/[0.08] text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
-                title="بازگشت به نمایش ۳ کارته تمامی بازارها"
+                title="بازگشت"
               >
-                <span>بازگشت به نمای ۳ کارته</span>
+                <span>بازگشت</span>
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
