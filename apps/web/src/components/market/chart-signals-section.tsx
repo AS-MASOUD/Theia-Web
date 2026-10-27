@@ -25,10 +25,11 @@ const SIGNAL_CATEGORIES = [
   { id: "gold_coin", label: "طلا و مسکوکات" },
   { id: "currency", label: "ارزهای شاخص" },
   { id: "crypto", label: "رمزارزها" },
+  { id: "stock", label: "بورس و سهام" },
   { id: "commodity", label: "فلزات و کالاها" },
 ];
 
-export function ChartSignalsSection() {
+export function ChartSignalsSection({ hideHeader = false }: { hideHeader?: boolean }) {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   const { data: signals, isLoading } = useQuery<MarketSignal[]>({
@@ -63,38 +64,62 @@ export function ChartSignalsSection() {
   return (
     <section className="space-y-6 pt-4">
       {/* Section Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div className="space-y-2.5">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#1B1D21] border border-white/[0.08] text-xs text-[#76A98C]">
-            <LineChart className="w-3.5 h-3.5" />
-            <span>تحلیل چارت و شاخص‌های بنیادی معامله‌گران</span>
+      {!hideHeader ? (
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div className="space-y-2.5">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#1B1D21] border border-white/[0.08] text-xs text-[#76A98C]">
+              <LineChart className="w-3.5 h-3.5" />
+              <span>تحلیل چارت و شاخص‌های بنیادی معامله‌گران</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black text-[#F0F0F1] tracking-tight">
+              دیده‌بان چارت و تحلیل ساختاری بازارهای مالی
+            </h2>
+            <p className="text-xs sm:text-sm text-[#A0A3AD] max-w-2xl leading-relaxed">
+              بررسی تخصصی الگوهای نموداری، شاخص‌های کلان اقتصادی و داده‌های فاندامنتال توسط معامله‌گران ارشد تیا
+            </p>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-[#F0F0F1] tracking-tight">
-            دیده‌بان چارت و تحلیل ساختاری بازارهای مالی
-          </h2>
-          <p className="text-xs sm:text-sm text-[#A0A3AD] max-w-2xl leading-relaxed">
-            بررسی تخصصی الگوهای نموداری، شاخص‌های کلان اقتصادی و داده‌های فاندامنتال توسط معامله‌گران ارشد تیا
-          </p>
-        </div>
 
-        {/* Categories Tab Bar */}
-        <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-2xl bg-[#141518] border border-white/[0.08]">
-          {SIGNAL_CATEGORIES.map((cat) => (
-            <button
-              key={cat.id}
-              type="button"
-              onClick={() => setSelectedCategory(cat.id)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                selectedCategory === cat.id
-                  ? "bg-[#76A98C] text-[#0D0E10] shadow-[0_0_12px_rgba(118,169,140,0.3)]"
-                  : "text-[#A0A3AD] hover:text-white"
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
+          {/* Categories Tab Bar */}
+          <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-2xl bg-[#141518] border border-white/[0.08]">
+            {SIGNAL_CATEGORIES.map((cat) => (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  selectedCategory === cat.id
+                    ? "bg-[#76A98C] text-[#0D0E10] shadow-[0_0_12px_rgba(118,169,140,0.3)]"
+                    : "text-[#A0A3AD] hover:text-white"
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.06]">
+          <div className="text-xs font-bold text-[#A0A3AD]">
+            <span>فیلتر چارت‌ها بر اساس بازار:</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-2xl bg-[#141518] border border-white/[0.08]">
+            {SIGNAL_CATEGORIES.map((cat) => (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  selectedCategory === cat.id
+                    ? "bg-[#76A98C] text-[#0D0E10] shadow-[0_0_12px_rgba(118,169,140,0.3)]"
+                    : "text-[#A0A3AD] hover:text-white"
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Signals / Analyses Grid */}
       {isLoading ? (

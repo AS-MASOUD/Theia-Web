@@ -3,11 +3,10 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
-import { Coins } from "lucide-react";
+import { Coins, LineChart, ChevronLeft } from "lucide-react";
 import { webApi } from "@/lib/api";
 import { getInitialMarketCatalog } from "@/data/market-instruments";
 import { MarketQuote, MarketRatesResponse } from "@/types/market";
-import { ChartSignalsSection } from "@/components/market/chart-signals-section";
 import { HighlightTickerStrip } from "@/components/market/highlight-ticker-strip";
 import { CategorizedQuotesGrid } from "@/components/market/categorized-quotes-grid";
 
@@ -68,8 +67,30 @@ export default function MarketsHubPage() {
           usdRate={usdRate}
         />
 
-        {/* Daily Signals & Chart Analysis Section from Traders */}
-        <ChartSignalsSection />
+        {/* Navigation Banner Link to Dedicated Chart Analysis Page */}
+        <div className="rounded-[22px] bg-gradient-to-r from-[#14161A] via-[#1A1D23] to-[#14161A] border border-white/[0.08] hover:border-[#76A98C]/40 p-6 flex flex-col sm:flex-row items-center justify-between gap-5 transition-all group shadow-lg">
+          <div className="flex items-center gap-4 text-center sm:text-right">
+            <div className="w-12 h-12 rounded-[14px] bg-[rgba(118,169,140,0.15)] border border-[#76A98C]/30 flex items-center justify-center text-[#76A98C] shrink-0 shadow-sm">
+              <LineChart className="w-6 h-6" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-base font-bold text-[#F0F0F1] group-hover:text-[#76A98C] transition-colors">
+                دیده‌بان چارت و سیگنال‌های تحلیلی معامله‌گران ارشد
+              </h3>
+              <p className="text-xs text-[#A0A3AD] max-w-xl">
+                مشاهده چارت‌های تکنیکال، الگوهای قیمتی، سطوح کلیدی عرضه و تقاضا و ایده‌های ساختاری در صفحه اختصاصی تحلیل‌ها
+              </p>
+            </div>
+          </div>
+
+          <Link
+            href="/analysis"
+            className="px-5 py-2.5 rounded-[12px] bg-[#76A98C] hover:bg-[#8EC0A3] text-[#0D0E10] text-xs font-bold transition-all shadow-[0_0_16px_rgba(118,169,140,0.25)] flex items-center gap-2 shrink-0 cursor-pointer"
+          >
+            <span>ورود به تالار تحلیل و سیگنال‌ها</span>
+            <ChevronLeft className="w-4 h-4" />
+          </Link>
+        </div>
 
         {/* Integration Call to action */}
         <div className="rounded-[22px] bg-gradient-to-r from-[#17181D] via-[#1B1D23] to-[#17181D] border border-white/[0.08] p-8 flex flex-col md:flex-row items-center justify-between gap-6">

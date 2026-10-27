@@ -4,19 +4,13 @@ import { ResponsiveAuthLink } from "@/components/responsive-auth-link";
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  Wallet,
-  LogIn,
-  UserPlus,
-  Menu,
-  X,
-  ChevronLeft,
-} from "lucide-react";
+import { Wallet, LogIn, UserPlus, Menu, X, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const PUBLIC_NAV_LINKS = [
   { name: "صفحه اصلی", href: "/" },
   { name: "دیده‌بان بازارها", href: "/markets" },
+  { name: "تحلیل و سیگنال‌ها", href: "/analysis" },
   { name: "امکانات سامانه", href: "/features" },
   { name: "بینش و مقالات", href: "/insights" },
   { name: "تعرفه‌ها", href: "/pricing" },
@@ -25,8 +19,11 @@ const PUBLIC_NAV_LINKS = [
 
 export function PublicHeader() {
   const pathname = usePathname();
+  if (pathname.startsWith("/preview")) return null;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const dashboardUrl = (process.env.NEXT_PUBLIC_DASHBOARD_URL || "http://localhost:3000").replace(/\/+$/, "");
+  const dashboardUrl = (
+    process.env.NEXT_PUBLIC_DASHBOARD_URL || "http://localhost:3000"
+  ).replace(/\/+$/, "");
 
   return (
     <header className="border-b border-white/[0.07] bg-[#0D0E10]/85 backdrop-blur-xl sticky top-0 z-50 transition-all">
@@ -34,22 +31,21 @@ export function PublicHeader() {
         {/* Brand & Desktop Navigation */}
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="h-9 w-9 rounded-[13px] bg-gradient-to-br from-[#F0AE55] via-[#E29D44] to-[#B37834] flex items-center justify-center shadow-[0_0_18px_rgba(240,174,85,0.28)] text-[#0D0E10] transition-transform group-hover:scale-105">
-              <Wallet className="h-4.5 w-4.5 stroke-[2.2]" />
-            </div>
-            <div className="flex flex-col">
-              <div className="flex items-center gap-1.5">
-                <span className="font-bold text-[15px] tracking-tight text-[#F0F0F1]">
-                  Personal FC
-                </span>
-                <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-[#F0AE55]/15 text-[#F0AE55] border border-[#F0AE55]/25">
-                  Theia
-                </span>
+            <div className="relative flex items-center justify-center shrink-0">
+              {/* Gentle ambient glow effect behind the logo */}
+              <div className="absolute -inset-2 rounded-full bg-[radial-gradient(circle_at_center,rgba(240,174,85,0.35)_0%,transparent_70%)] blur-md pointer-events-none transition-all duration-300 group-hover:scale-125 group-hover:opacity-100" />
+
+              <div className="relative h-9 w-9 rounded-[13px] bg-[#141519]/90 border border-white/[0.08] flex items-center justify-center shadow-[0_0_16px_rgba(240,174,85,0.18)] group-hover:border-[#F0AE55]/40 transition-all p-1.5">
+                <img
+                  src="/Theia-Logo.svg"
+                  alt="مشاور مدیریت مالی تئا"
+                  className="w-full h-full object-contain filter drop-shadow-[0_0_6px_rgba(240,174,85,0.35)] transition-transform group-hover:scale-105"
+                />
               </div>
-              <span className="text-[11px] text-[#A0A3AD] font-normal leading-none mt-0.5">
-                مشاور مدیریت مالی و ثروت
-              </span>
             </div>
+            <span className="font-bold text-[13px] sm:text-[15px] tracking-tight text-[#F0F0F1] group-hover:text-[#F0AE55] transition-colors whitespace-nowrap">
+              مشاور مدیریت مالی تئا
+            </span>
           </Link>
 
           {/* Desktop Links */}
@@ -68,7 +64,7 @@ export function PublicHeader() {
                     "px-3 py-1.5 rounded-[10px] transition-all duration-200 relative",
                     isActive
                       ? "text-[#F0AE55] bg-[rgba(240,174,85,0.08)] font-semibold"
-                      : "text-[#A0A3AD] hover:text-[#F0F0F1] hover:bg-white/[0.04]"
+                      : "text-[#A0A3AD] hover:text-[#F0F0F1] hover:bg-white/[0.04]",
                   )}
                 >
                   {item.name}
@@ -84,7 +80,10 @@ export function PublicHeader() {
         {/* Right Actions: Direct to Dashboard Authority */}
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <ResponsiveAuthLink href={`${dashboardUrl}/login`} className="hidden sm:block">
+            <ResponsiveAuthLink
+              href={`${dashboardUrl}/login`}
+              className="hidden sm:block"
+            >
               <button
                 type="button"
                 className="px-3.5 py-2 rounded-[13px] text-xs font-medium text-[#A0A3AD] hover:text-[#F0F0F1] hover:bg-white/[0.05] transition-colors flex items-center gap-1.5 cursor-pointer"
@@ -99,7 +98,7 @@ export function PublicHeader() {
                 className="px-4 py-2 rounded-[13px] bg-[#F0AE55] hover:bg-[#F3BE76] text-[#0D0E10] text-xs font-bold transition-all shadow-[0_0_16px_rgba(240,174,85,0.25)] hover:shadow-[0_0_22px_rgba(240,174,85,0.4)] flex items-center gap-1.5 cursor-pointer active:scale-95"
               >
                 <UserPlus className="w-3.5 h-3.5 stroke-[2.2]" />
-                <span>شروع رایگان</span>
+                <span>ثبت‌نام رایگان</span>
               </button>
             </ResponsiveAuthLink>
           </div>
@@ -139,7 +138,7 @@ export function PublicHeader() {
                     "flex items-center justify-between px-3.5 py-2.5 rounded-[12px] text-sm font-medium transition-colors",
                     isActive
                       ? "text-[#F0AE55] bg-[rgba(240,174,85,0.1)] border-r-2 border-[#F0AE55]"
-                      : "text-[#A0A3AD] hover:text-[#F0F0F1] hover:bg-white/[0.04]"
+                      : "text-[#A0A3AD] hover:text-[#F0F0F1] hover:bg-white/[0.04]",
                   )}
                 >
                   <span>{item.name}</span>
@@ -174,7 +173,11 @@ export function PublicHeader() {
 }
 
 export function PublicFooter() {
-  const dashboardUrl = (process.env.NEXT_PUBLIC_DASHBOARD_URL || "http://localhost:3000").replace(/\/+$/, "");
+  const pathname = usePathname();
+  if (pathname.startsWith("/preview")) return null;
+  const dashboardUrl = (
+    process.env.NEXT_PUBLIC_DASHBOARD_URL || "http://localhost:3000"
+  ).replace(/\/+$/, "");
 
   return (
     <footer className="border-t border-white/[0.07] bg-[#0B0C0E] text-[#E8E8E8] mt-auto relative overflow-hidden">
@@ -185,21 +188,25 @@ export function PublicFooter() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
           {/* Brand & Purpose */}
           <div className="lg:col-span-2 space-y-4">
-            <Link href="/" className="flex items-center gap-3">
-              <div className="h-9 w-9 rounded-[13px] bg-gradient-to-br from-[#F0AE55] to-[#B37834] flex items-center justify-center text-[#0D0E10] shadow-[0_0_16px_rgba(240,174,85,0.25)]">
-                <Wallet className="h-4.5 w-4.5 stroke-[2.2]" />
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="relative flex items-center justify-center shrink-0">
+                {/* Gentle ambient glow effect behind the logo */}
+                <div className="absolute -inset-2 rounded-full bg-[radial-gradient(circle_at_center,rgba(240,174,85,0.3)_0%,transparent_70%)] blur-md pointer-events-none" />
+
+                <div className="relative h-9 w-9 rounded-[13px] bg-[#141519]/90 border border-white/[0.08] flex items-center justify-center shadow-[0_0_16px_rgba(240,174,85,0.18)] p-1.5">
+                  <img
+                    src="/Theia-Logo.svg"
+                    alt="مشاور مدیریت مالی تئا"
+                    className="w-full h-full object-contain filter drop-shadow-[0_0_6px_rgba(240,174,85,0.35)]"
+                  />
+                </div>
               </div>
               <div className="flex flex-col">
-                <div className="flex items-center gap-1.5">
-                  <span className="font-bold tracking-tight text-base text-[#F0F0F1]">
-                    Personal FC
-                  </span>
-                  <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-[#F0AE55]/15 text-[#F0AE55] border border-[#F0AE55]/25">
-                    Theia
-                  </span>
-                </div>
+                <span className="font-bold tracking-tight text-base text-[#F0F0F1] group-hover:text-[#F0AE55] transition-colors">
+                  مشاور مدیریت مالی تئا
+                </span>
                 <span className="text-[11px] text-[#A0A3AD]">
-                  مدیریت هوشمند مدیریت مالی و پورتفولیو
+                  مدیریت هوشمند مالی و پورتفولیو
                 </span>
               </div>
             </Link>
@@ -280,6 +287,14 @@ export function PublicFooter() {
                   className="text-[#A0A3AD] hover:text-[#F0AE55] transition-colors"
                 >
                   دیده‌بان جامع طلا و مسکوکات
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/analysis"
+                  className="text-[#A0A3AD] hover:text-[#76A98C] transition-colors"
+                >
+                  دیده‌بان چارت و سیگنال‌ها
                 </Link>
               </li>
               <li>
@@ -370,8 +385,8 @@ export function PublicFooter() {
         {/* Bottom bar */}
         <div className="pt-8 border-t border-white/[0.07] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#707581]">
           <p>
-            © {new Date().getFullYear()} Theia Personal Finance Consultant
-            (Personal FC). تمامی حقوق محفوظ است.
+            © {new Date().getFullYear()} سامانه مشاور مدیریت مالی تئا (Theia).
+            تمامی حقوق محفوظ است.
           </p>
           <div className="flex flex-wrap items-center gap-4 text-[11px]">
             <a

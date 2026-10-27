@@ -39,6 +39,7 @@ import { getInitialMarketCatalog } from "@/data/market-instruments";
 import { getAllInsights } from "@/data/insights-data";
 import { MarketQuote, MarketRatesResponse } from "@/types/market";
 import { cn } from "@/lib/utils";
+import { IphoneMobilePreview } from "@/components/home/iphone-mobile-preview";
 
 // Mini Sparkline component
 function Sparkline({ isPositive }: { isPositive: boolean }) {
@@ -183,156 +184,9 @@ export default function PublicHomePage() {
             </div>
           </div>
 
-          {/* Left Column: Premium Layered Application Preview (Reference & Mobile styled) */}
-          <div className="lg:col-span-6 relative">
-            {/* Elevated preview container */}
-            <div className="relative rounded-[26px] bg-[#141519] border border-white/[0.09] p-5 sm:p-7 shadow-[0_25px_70px_rgba(0,0,0,0.65)] space-y-5 backdrop-blur-xl">
-              {/* Header card preview */}
-              <div className="flex items-center justify-between border-b border-white/[0.06] pb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-[13px] bg-gradient-to-tr from-[#F0AE55] to-[#B37834] flex items-center justify-center text-[#0D0E10] font-bold shadow-[0_0_14px_rgba(240,174,85,0.25)]">
-                    <Wallet className="w-4.5 h-4.5 stroke-[2.2]" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-xs font-bold text-[#F0F0F1]">
-                        مشاور مدیریت مالی تئا
-                      </span>
-                      <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-[#76A98C]/15 text-[#76A98C] font-semibold border border-[#76A98C]/30">
-                        داده زنده
-                      </span>
-                    </div>
-                    <span className="text-[10px] text-[#707581]">
-                      نسخه پیش‌نمایش تعاملی
-                    </span>
-                  </div>
-                </div>
-
-                {/* Net worth readout */}
-                <div className="text-left">
-                  <span className="text-[10px] text-[#A0A3AD]">
-                    ارزش خالص کل
-                  </span>
-                  <div className="flex items-baseline gap-1 mt-0.5">
-                    <span className="text-lg font-black text-[#F0F0F1] font-mono">
-                      ۸۴۵,۰۰۰,۰۰۰
-                    </span>
-                    <span className="text-[10px] text-[#F0AE55]">تومان</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Ambient Mode Card (Identical to User Mobile Screenshot Media 2) */}
-              <div className="rounded-[20px] bg-[#1A1C21] border border-white/[0.07] p-5 space-y-4 relative overflow-hidden">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <span className="text-[10px] font-semibold text-[#F0AE55] flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#F0AE55]" />
-                      مدل تئا • پورتفولیو بهینه
-                    </span>
-                    <h3 className="text-sm font-bold text-[#F0F0F1]">
-                      حالت تعادلی (Ambient Mode)
-                    </h3>
-                  </div>
-
-                  <span className="px-2 py-0.5 rounded-[8px] bg-[#76A98C]/15 text-[#76A98C] text-[10px] font-bold border border-[#76A98C]/25">
-                    +12.4% رشد ماهانه
-                  </span>
-                </div>
-
-                {/* Vertical Tactile Sliders / Fills (Media 2 style) */}
-                <div className="grid grid-cols-12 gap-3 items-stretch">
-                  {/* Left: Quick Toggle Switch */}
-                  <div className="col-span-3 rounded-[16px] bg-[#121316] border border-white/[0.06] p-3 flex flex-col justify-between items-center text-center">
-                    <div className="w-8 h-8 rounded-full bg-[#F0AE55] flex items-center justify-center text-[#0D0E10] shadow-[0_0_12px_rgba(240,174,85,0.4)]">
-                      <Zap className="w-4 h-4 stroke-[2.2]" />
-                    </div>
-                    <div className="space-y-0.5">
-                      <span className="text-[10px] font-bold text-[#F0AE55]">
-                        روشن
-                      </span>
-                      <p className="text-[9px] text-[#707581]">تعدیل خودکار</p>
-                    </div>
-                  </div>
-
-                  {/* Middle: 30% Safe Reserve Card */}
-                  <div className="col-span-4 rounded-[16px] bg-[#121316] border border-white/[0.06] p-3 flex flex-col justify-between relative overflow-hidden">
-                    <div className="relative z-10">
-                      <span className="text-lg font-black text-[#F0F0F1]">
-                        30%
-                      </span>
-                      <p className="text-[10px] text-[#88A9BC] font-semibold mt-0.5">
-                        ذخیره امن
-                      </p>
-                      <span className="text-[9px] text-[#707581]">
-                        نقدینگی و بانکی
-                      </span>
-                    </div>
-                    <div className="w-full bg-[#88A9BC]/15 h-1.5 rounded-full mt-3 overflow-hidden">
-                      <div className="bg-[#88A9BC] h-full w-[30%]" />
-                    </div>
-                  </div>
-
-                  {/* Right: 70% Investment & Gold Card (Warm Amber Fill) */}
-                  <div className="col-span-5 rounded-[16px] bg-gradient-to-b from-[#1F1E1B] to-[#161513] border border-[#F0AE55]/30 p-3 flex flex-col justify-between relative overflow-hidden shadow-[0_0_20px_rgba(240,174,85,0.12)]">
-                    <div className="relative z-10">
-                      <span className="text-lg font-black text-[#F0AE55]">
-                        70%
-                      </span>
-                      <p className="text-[10px] text-[#F0AE55] font-semibold mt-0.5">
-                        سرمایه‌گذاری
-                      </p>
-                      <span className="text-[9px] text-[#A0A3AD]">
-                        طلا، ارز و سهام
-                      </span>
-                    </div>
-                    <div className="w-full bg-black/40 h-1.5 rounded-full mt-3 overflow-hidden">
-                      <div className="bg-[#F0AE55] h-full w-[70%] shadow-[0_0_8px_#F0AE55]" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Horizon & Risk Temperature Slider (Media 2 exact reproduction) */}
-                <div className="space-y-2 pt-2 border-t border-white/[0.05]">
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="text-[#A0A3AD] text-[11px]">
-                      دمای افق سرمایه‌گذاری و ریسک:
-                    </span>
-                    <span className="px-2 py-0.5 rounded-[8px] bg-[#F0AE55]/15 text-[#F0AE55] text-[10px] font-bold border border-[#F0AE55]/25">
-                      تعادل طلایی
-                    </span>
-                  </div>
-
-                  {/* Gradient Track Slider */}
-                  <div className="relative h-6 flex items-center">
-                    <div className="w-full h-3 rounded-full bg-gradient-to-l from-[#88A9BC] via-[#B8A382] to-[#E29D44] shadow-inner" />
-                    <div
-                      style={{ right: `${ambientRisk}%` }}
-                      className="absolute w-5 h-5 rounded-full bg-[#F0F0F1] border-2 border-[#F0AE55] shadow-[0_0_12px_rgba(240,174,85,0.6)] cursor-pointer -translate-x-1/2"
-                    />
-                  </div>
-
-                  <div className="flex justify-between text-[10px] text-[#707581]">
-                    <span>رشد سریع (پویایی)</span>
-                    <span>محافظه‌کار (پایداری)</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* AI Narrative Preview Pill */}
-              <div className="rounded-[14px] bg-[#101114] border border-[#F0AE55]/20 p-3 flex items-center gap-3">
-                <div className="w-7 h-7 rounded-full bg-[#F0AE55]/15 flex items-center justify-center text-[#F0AE55] shrink-0">
-                  <Bot className="w-4 h-4" />
-                </div>
-                <p className="text-[11px] text-[#A0A3AD] leading-relaxed">
-                  <span className="text-[#F0AE55] font-semibold">
-                    تحلیل دستیار هوشمند:{" "}
-                  </span>
-                  با توجه به تورم دوره‌ای، بازتوزیع 20 میلیون تومان نقدینگی
-                  مازاد به صندوق طلا، قدرت خرید شما را تثبیت می‌کند.
-                </p>
-              </div>
-            </div>
+          {/* Left Column: iPhone Mobile App Frame Preview */}
+          <div className="lg:col-span-6 relative flex items-center justify-center">
+            <IphoneMobilePreview />
           </div>
         </div>
       </section>
